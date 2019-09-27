@@ -1,0 +1,68 @@
+<!--<ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+-->
+<ion-content padding>
+
+    <ion-card-header>
+        <ion-card-title>Singapore Driving Test</ion-card-title>
+        <ion-card-subtitle></ion-card-subtitle>
+      </ion-card-header>
+      <ion-img class="logo-icon" src="assets/icon/logo.png" ></ion-img>
+      <hr>
+      <hr>
+      <form [formGroup]="validations_form" *ngIf="showForgotSection == false" (ngSubmit)="launchPage(validations_form.value)">
+          <div class="validation-errors" [innerHTML]="formError">
+          </div>
+          <ion-item>
+            <ion-input  formControlName="username" placeholder="EmailId/UserName"></ion-input>
+          </ion-item>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.username">
+              <div class="error-message" *ngIf="validations_form.get('username').hasError(validation.type) && (validations_form.get('username').dirty || validations_form.get('username').touched)">
+                <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+              </div>
+            </ng-container>
+          </div>
+          <ion-item>
+            <ion-input  type="password" formControlName="password" minlength="3" placeholder="Password"></ion-input>
+          </ion-item>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.password">
+              <div class="error-message" *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)">
+                <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+              </div>
+            </ng-container>
+          </div>
+          <hr>
+          <a class="forgot_password" (click)="showForgot()">Forgot Password?</a>
+        
+        <div class="login-action-btn">
+          <ion-button class="buttons" type="submit" [disabled]="!validations_form.valid"><p>Already a Member<span>Sign in</span></p></ion-button>
+          <ion-button class="buttons" (click)="OpenSignup()"><p>For Better Experience<span>Sign up</span></p></ion-button>
+        </div>
+      </form>
+      <form [formGroup]="validations_Forgot_form" *ngIf="showForgotSection == true" (ngSubmit)="resetPassword(validations_Forgot_form.value)">
+        <div class="validation-errors" [innerHTML]="formForgotError">
+        </div>
+        <ion-item>
+          <ion-input formControlName="email" type="email" placeholder="Email ID" required></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_forgot_messages.email">
+            <div class="error-message" *ngIf="validations_Forgot_form.get('email').hasError(validation.type) && (validations_Forgot_form.get('email').dirty || validations_Forgot_form.get('email').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+        <div class="login-action-btn">
+          <ion-button class="buttons" type="submit" [disabled]="!validations_Forgot_form.valid"><p>Submit</p></ion-button>
+          <ion-button class="buttons" (click)="goBack()"><p>Back</p></ion-button>
+        </div>
+      </form>
+      <div class="skip-sec">
+        <a class="skip_link" [routerLink]="['/category']">Skip and just Explore</a><ion-icon class="icon" name="information-circle-outline"></ion-icon>
+      </div>
+</ion-content>
