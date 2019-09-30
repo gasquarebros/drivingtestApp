@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'signup', loadChildren: './signup/signup.module#SignupPageModule' },
   { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
   { path: 'category', loadChildren: './category/category.module#CategoryPageModule' },
+  { path: 'questions', loadChildren: './questions/questions.module#QuestionsPageModule' },
 ];
 
 @NgModule({

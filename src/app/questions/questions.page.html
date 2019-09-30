@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <span class="back fl" (click)="goPrev()" [ngClass]="{'disable-events' : currentIndex <= 0}"><ion-icon name="arrow-round-back"></ion-icon></span>
+      <span class="question_content">Q{{currentIndex + 1}} of {{count}}</span>
+      <span class="forward fr" (click)="goNext()" [ngClass]="{'disable-events' : currentIndex == count}"><ion-icon name="arrow-round-forward"></ion-icon></span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="questions_part">
+    <div class="image_part" *ngIf="question.image !='' && (question.display_type == 'both' || question.display_type == 'image')">
+
+    </div>
+    <div class="video_part" *ngIf="question.video !='' && (question.display_type == 'both' || question.display_type == 'video')">
+
+    </div>
+    <h3 class="question_text" *ngIf="question_language == 'english'">{{question.title}}</h3> 
+    <h3 class="question_text" *ngIf="question_language == 'tamil'">{{question.title_tamil}}</h3>
+  </div>
+  <div class="options_part">
+      <ion-list>
+        <ion-radio-group>
+            <ion-list-header>
+              <ion-label>Options</ion-label>
+            </ion-list-header>
+            <ion-item *ngFor="let options of question.options;let i=index;">
+              <ion-label class="question_opttext" text-wrap *ngIf="question_language == 'english'">{{options.option}}</ion-label>
+              <ion-label class="question_opttext" text-wrap *ngIf="question_language == 'tamil'">{{options.option_tamil}}</ion-label>
+              <ion-radio slot="start" [checked]="getChecked(options.id)" (ionSelect)="selectOption(options.id)"  value="{{options.id}}"></ion-radio>
+            </ion-item>
+        </ion-radio-group>
+      </ion-list>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+      <div col="6" [ngClass]="{'disable-events' : currentIndex <= 0}" class="width50 blkbtn ptr" (click)="goPrev()">
+        <span class="txt">Previous</span>
+      </div>
+      <div col="6" *ngIf="currentIndex != count-1" class="width50 redbtn ptr" (click)="goNext()">
+        <span class="txt">Next</span>
+      </div>
+      <div col="6" *ngIf="currentIndex == count-1" class="width50 redbtn ptr" (click)="submitAnswers()">
+        <span class="txt">Submit</span>
+      </div>
+  </ion-toolbar>
+</ion-footer>

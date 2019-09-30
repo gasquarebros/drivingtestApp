@@ -8,5 +8,32 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-slides pager="false" [options]="slideOptsOne" #slideWithNav >
+            <ion-slide *ngFor="let cat of category">
+              <div class="category-section">
+                <span class="content_orange">{{cat.name}}</span>
+                <div class="img_part">
+                  <img src="{{cat.image}}" alt="{{cat.name}}">
+                </div>
+                <h3 class="count">{{cat.count}} Questions</h3>
+                <div class="selectpart">
+                  <ion-select value="20" okText="Okay" cancelText="Dismiss">
+                    <ion-select-option value="20">20</ion-select-option>
+                    <ion-select-option value="30">30</ion-select-option>
+                    <ion-select-option value="40">40</ion-select-option>
+                    <ion-select-option value="50">50</ion-select-option>
+                  </ion-select>
+                  <ion-button color="secondary" (click)="startTest(cat.slug)">
+                    Start
+                  </ion-button>
+                </div>
+              </div>
+            </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

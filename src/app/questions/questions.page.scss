@@ -1,0 +1,48 @@
+.back {
+    width: 10%;
+    cursor: pointer;
+}
+.question_content {
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    float: left;
+}
+.forward {
+    width: 10%;
+    cursor: pointer;
+}
+.fr {
+    float: right;
+}
+.fl {
+    float: left;
+}
+
+.disable-events {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.5;
+}
+.question_text {
+    font-size:15px; 
+}
+.question_opttext {
+    font-size: 13px;
+}
+
+.width50 {
+    width: 50%;
+    float: left;
+    padding: 16px 0px;
+    text-align: center;
+    color:white;
+}
+.blkbtn {
+    border-top: 1px solid black;
+    background: black;
+}
+.redbtn {
+    background: red;
+    border-top: 1px solid red;
+}
