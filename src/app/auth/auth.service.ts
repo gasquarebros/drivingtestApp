@@ -40,7 +40,7 @@ export class AuthService {
     return this.httpClient.post<any>(`${this.AUTH_SERVER_ADDRESS}/register`, user).pipe(
       tap(async (res:  any ) => {
         if (res.user) {
-          await this.storage.set('ACCESS_TOKEN', res.user.access_token);
+          // await this.storage.set('ACCESS_TOKEN', res.user.access_token);
           await this.storage.set('EXPIRES_IN', res.user.expires_in);
           this.authSubject.next(true);
         }
@@ -72,7 +72,7 @@ export class AuthService {
 
   getUserInfo() {
 
-    return this.storage.get('USER_DATA');
+    return this.storage.get('USER_DATA_drivingApp');
     /*
     let storageValue;
     console.log('get data info');

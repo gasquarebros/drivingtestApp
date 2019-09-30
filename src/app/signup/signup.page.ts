@@ -26,11 +26,6 @@ export class SignupPage implements OnInit {
       { type: 'pattern', message: 'Your username must contain only numbers and letters.' },
       { type: 'validUsername', message: 'Your username has already been taken.' }
     ],
-    'companyname': [
-      { type: 'minlength', message: 'Company Name must be at least 1 characters long.' },
-      { type: 'maxlength', message: 'Company Name cannot be more than 25 characters long.' },
-      { type: 'validCompanyname', message: 'Your company name has already been taken.' }
-    ],
     'password': [
       { type: 'required', message: 'Password is required.' },
       { type: 'minlength', message: 'Password must be at least 5 characters long.' },
@@ -45,6 +40,10 @@ export class SignupPage implements OnInit {
     'firstname': [
       { type: 'required', message: 'Firstname is required.' },
     ],
+    'phoneno': [
+      { type: 'required', message: 'Phone number is required' },
+      { type: 'pattern', message: 'Invalid Phone number' },
+    ]
   };
   base64Image: any = '';
   image: any = '';
@@ -69,14 +68,12 @@ export class SignupPage implements OnInit {
         Validators.minLength(5),
         Validators.required
       ])),
-      companyname: new FormControl( ''),
       lastname: new FormControl( '', Validators.compose([
         Validators.maxLength(25),
         Validators.minLength(1)
       ])),
       dob: new FormControl( ''),
       gender: new FormControl( ''),
-      usertype: new FormControl(''),
       username: new FormControl('', Validators.compose([
         Validators.maxLength(25),
         Validators.minLength(5),
@@ -84,6 +81,12 @@ export class SignupPage implements OnInit {
       ])),
       email: new FormControl('', Validators.compose([
         Validators.pattern('[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})'),
+        Validators.required
+      ])),
+      phoneno: new FormControl('', Validators.compose([
+        Validators.maxLength(12),
+        Validators.minLength(5),
+        Validators.pattern('[0-9]{5,10}'),
         Validators.required
       ])),
       password: new FormControl('', Validators.compose([
@@ -106,26 +109,23 @@ export class SignupPage implements OnInit {
   register(form) {
     console.log(form);
     const body = new FormData();
-    body.append('customer_first_name', form.firstname);
-    body.append('customer_last_name', form.lastname);
-    body.append('customer_username', form.username);
-    body.append('customer_email', form.email);
-    body.append('customer_password', form.password);
-    body.append('dob', form.dob);
+    body.append('firstname', form.firstname);
+    body.append('lastname', form.lastname);
+    body.append('username', form.username);
+    body.append('email', form.email);
+    body.append('password', form.password);
+    body.append('birthday', form.dob);
     body.append('gender', form.gender);
+    body.append('phoneno', form.phoneno);
     this.showLoader();
-    this.api.postData('api/register', body).subscribe(result => {
-      console.log('innn');
+    this.api.postData('api/login/register', body).subscribe(result => {
       const res: any = result;
       if (res !== undefined) {
-        console.log(res.status);
-        if (res.status === 'success') {
-          this.presentToastWithOptions(res.message);
+        if (res[0].status === 'success') {
+          this.presentToastWithOptions(res[0].message);
           // this.router.navigateByUrl('/login');
         } else {
-          
-          this.formError = res[0].message;
-          console.log(this.formError);
+          this.formError = res[0].form_error;
         }
       }
     }, err => {

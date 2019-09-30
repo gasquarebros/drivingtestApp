@@ -46,6 +46,16 @@
               </div>
             </ion-item>
             <ion-item>
+              <ion-input  formControlName="phoneno" type="text" placeholder="Phone " required></ion-input>
+              <div class="validation-errors">
+                  <ng-container *ngFor="let validation of validation_messages.phoneno">
+                    <div class="error-message" *ngIf="validations_form.get('phoneno').hasError(validation.type) && (validations_form.get('phoneno').dirty || validations_form.get('phoneno').touched)">
+                      <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+                    </div>
+                  </ng-container>
+                </div>
+            </ion-item>
+            <ion-item>
               <ion-input formControlName="email" type="email" placeholder="Email ID" required></ion-input>
               <div class="validation-errors">
                   <ng-container *ngFor="let validation of validation_messages.email">

@@ -10,9 +10,9 @@ const httpOptions = {
   'Accept': 'application/json',
   'Access-Control-Allow-Origin': '*' })
 };
-// const apiUrl = 'http://localhost/bloggotoweb/';
-// const apiUrl = 'http://192.168.1.11/bloggotoweb/';
-const apiUrl = 'http://www.bloggoto.com/';
+// const apiUrl = 'http://localhost/drivingtest/sgdrivingtest/';
+const apiUrl = 'https://drivingappsg.000webhostapp.com/'
+// const apiUrl = 'http://www.bloggoto.com/';
 // const apiUrl = 'https://cors-anywhere.herokuapp.com/http://www.bloggoto.com/';
 
 @Injectable({

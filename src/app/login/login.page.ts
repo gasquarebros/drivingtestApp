@@ -112,4 +112,29 @@ export class LoginPage implements OnInit {
     });
   }
 
+  launchPage(values) {
+    this.formError = '';
+    const body = new FormData();
+    body.append('username', values.username);
+    body.append('password', values.password);
+    this.api.postData('api/login', body).subscribe(result => {
+      const res: any = result;
+      if (res !== undefined) {
+        if (res[0].status === 'success') {
+          // this.storage.set('ACCESS_TOKEN', res[0].data.access_token);
+          this.storage.set('USER_DATA_drivingApp', res[0].data);
+          this.events.publish('user:login');
+          this.myApp.loggedIn();
+          this.router.navigateByUrl('/category');
+        } else {
+          this.formError = res[0].message;
+        }
+      }
+    }, err => {
+      console.log(err);
+    });
+  }
+
+
+
 }
