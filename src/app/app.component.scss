@@ -1,0 +1,20 @@
+
+ion-title {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+    height: 45px;
+    .fl {
+        float: left;
+        display: block;
+        margin: 10px;
+    }
+    .fr {
+        float: right;
+        display: block;
+        img {
+            width: 40px;
+        }
+    }
+}

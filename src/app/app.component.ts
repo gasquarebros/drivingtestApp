@@ -12,6 +12,7 @@ import { Events, MenuController } from '@ionic/angular';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
+  styleUrls: ['./app.component.scss'],
   providers: [AuthService, Events]
 })
 export class AppComponent {
@@ -50,7 +51,11 @@ export class AppComponent {
     }, 100);
   }
   logout() {
+    this.menuCtrl.close('content1');
     this.authService.removeUserInfo();
     this.router.navigateByUrl('/login');
+  }
+  profile() {
+    this.menuCtrl.close();
   }
 }

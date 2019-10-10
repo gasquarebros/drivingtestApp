@@ -29,6 +29,12 @@ ion-card-header {
 .login-action-btn {
     margin-bottom: 20px;
     margin-top: 15px;
+    ion-button {
+        --background: #ff3333;
+        --background-activated: #ff3333;
+        --background-focused: #ff3333;
+        --background-hover: #ff3333;
+    }
     .buttons {
         width: 45%;
         margin: 5px 6px auto;

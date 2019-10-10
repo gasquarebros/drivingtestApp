@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 })
 export class CategoryPage implements OnInit {
   public category: any = [];
+  public count: any;
+  public sel_language: string;
 
   slideOptsOne = {
     initialSlide: 0,
@@ -16,6 +18,7 @@ export class CategoryPage implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
+    this.sel_language = 'english';
     this.category = [
       {
         'id': 1,
@@ -42,8 +45,16 @@ export class CategoryPage implements OnInit {
     ];
   }
 
+  changeValue(data, type) {
+    if(type == 'count') {
+      this.count = data.detail.value;
+    } else {
+      this.sel_language = data.detail.value;
+    }
+  }
+
   startTest(category) {
-    this.router.navigate(['/questions'], { queryParams: { slug: category } });
+    this.router.navigate(['/questions'], { queryParams: { slug: category, limit: this.count, language: this.sel_language } });
   }
 
 }

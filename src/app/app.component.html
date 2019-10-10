@@ -1,30 +1,26 @@
 <ion-app>
-  <ion-menu contentId="content1" side="start">
+  <ion-menu contentId="content1" menuId="content1" type="overlay" class="my-custom-menu" side="start">
     <ion-header>
       <ion-toolbar>
-        <ion-title>Menu</ion-title>
+        <ion-title><span class="fl"><ion-icon name="home"></ion-icon> Home</span>
+          <span class="fr"><img src="assets/icon/logo.png"></span>
+        </ion-title>
+
       </ion-toolbar>
     </ion-header>
     <ion-content>
       <ion-list>
-        <ion-item >
-          <ion-avatar>
-              <img src="assets/icon/avatar.png">
-          </ion-avatar>
-          <div class="profile-top-section">
-            <p class="profile-username" style="margin: 0px;" *ngIf="userInfo != undefined && userInfo.username != undefined">Hi, {{userInfo.username}}</p>
-            <p class="profile-action-btn" style="margin:5px 0px; ">
-              <button  ion-item  class="edit-profile-btn nobgm menu" style="background:none;" menuClose [routerLink]="['/account']" routerDirection="root" (click)="profile()">edit profile</button>
-              <button  class="logout-btn nobgm" style="background:none;" menuClose (click)="logout()">Logout</button>
-            </p>
-          </div>    
+        <ion-item>
+          <button  menuClose ion-item class="menu" style="font-size:16px; background:none;" [routerLink]="['/account']" (click)="profile()" routerDirection="root" >My Profile</button>
         </ion-item>
         <ion-item>
-          <button  menuClose ion-item class="menu" style="font-size:16px; background:none;" [routerLink]="['/category']" routerDirection="root" >Category</button>
+          <button  menuClose ion-item class="menu" style="font-size:16px; background:none;" [routerLink]="['/category']" (click)="profile()" routerDirection="root" >Category</button>
+        </ion-item>
+        <ion-item>
+          <button  ion-item class="logout-btn nobgm" style="font-size:16px; background:none;" menuClose (click)="logout()">Logout</button>
         </ion-item>
       </ion-list>
     </ion-content>
   </ion-menu>
-  
   <ion-router-outlet id="content1" main></ion-router-outlet>
 </ion-app>

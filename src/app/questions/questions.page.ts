@@ -33,12 +33,21 @@ export class QuestionsPage implements OnInit {
     this.chooseOption = '';
     this.question_language = 'english';
     const queryParams = this.route.snapshot.queryParams;
-    if (queryParams !== undefined && queryParams.slug != undefined && queryParams.slug != '') {
-      this.fetchQuestions(queryParams.slug);
+    if(queryParams !== undefined && queryParams.count != undefined && queryParams.count !='') {
+      this.count = queryParams.count;
     }
+    
+    if(queryParams !== undefined && queryParams.language != undefined && queryParams.language !='') {
+      this.question_language = queryParams.language;
+    }
+
+    if (queryParams !== undefined && queryParams.slug != undefined && queryParams.slug != '') {
+      this.fetchQuestions(queryParams.slug, this.count);
+    }
+    
   }
 
-  fetchQuestions(slug) {
+  fetchQuestions(slug, count) {
       const data = [
         {
           title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
@@ -158,7 +167,7 @@ export class QuestionsPage implements OnInit {
         },
       ];
       this.questions = data;
-      this.count = 4;
+      this.count = this.questions.length;
       this.question = this.questions[this.currentIndex];
   }
 
@@ -208,7 +217,7 @@ export class QuestionsPage implements OnInit {
   }
 
   saveAnswers() {
-    this.router.navigate(['/category'], { queryParams: { slug: '123123' } });
+    this.router.navigate(['/questions/thankyou'], { queryParams: { percent: '90' , participationId: 1, language: this.question_language} });
   }
 
 }

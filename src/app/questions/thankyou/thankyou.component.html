@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Thank you
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="success_image img">
+    <img *ngIf="percentage >= 90" src="assets/thumb_win.png">
+    <img *ngIf="percentage < 90" src="assets/thumb_fail.png">
+  </div>
+  <!--
+  <div class="failure_image img">
+    <img src="assets/thumb.jpg">
+  </div>-->
+  <div class="score-details">
+    <p>You have obtained</p>
+    <div class="c100 p{{percentage}} green">
+        <span>{{percentage}}%</span>
+        <div class="slice">
+            <div class="bar"></div>
+            <div class="fill"></div>
+        </div>
+    </div>
+  </div>
+  <div class="report_section">
+    if you want to report any invalid answers <a (click)="showFilter()">click here</a>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="backtodash">
+    <ion-button expand="full" class="buttons" (click)="gotoDash()">Go to Dashboard</ion-button>
+  </div>
+</ion-footer>
