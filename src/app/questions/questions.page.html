@@ -16,8 +16,8 @@
     <div class="video_part" *ngIf="question.video !='' && (question.display_type == 'both' || question.display_type == 'video')">
 
     </div>
-    <h3 class="question_text" *ngIf="question_language == 'english'">{{question.title}}</h3> 
-    <h3 class="question_text" *ngIf="question_language == 'tamil'">{{question.title_tamil}}</h3>
+    <h3 class="question_text" *ngIf="questionLanguage == 'english'">{{question.title}}</h3> 
+    <h3 class="question_text" *ngIf="questionLanguage == 'tamil'">{{question.title_tamil}}</h3>
   </div>
   <div class="options_part">
       <ion-list>
@@ -26,8 +26,8 @@
               <ion-label>Options</ion-label>
             </ion-list-header>
             <ion-item *ngFor="let options of question.options;let i=index;">
-              <ion-label class="question_opttext" text-wrap *ngIf="question_language == 'english'">{{options.option}}</ion-label>
-              <ion-label class="question_opttext" text-wrap *ngIf="question_language == 'tamil'">{{options.option_tamil}}</ion-label>
+              <ion-label class="question_opttext" text-wrap *ngIf="questionLanguage == 'english'">{{options.option}}</ion-label>
+              <ion-label class="question_opttext" text-wrap *ngIf="questionLanguage == 'tamil'">{{options.option_tamil}}</ion-label>
               <ion-radio slot="start" [checked]="getChecked(options.id)" (ionSelect)="selectOption(options.id)"  value="{{options.id}}"></ion-radio>
             </ion-item>
         </ion-radio-group>

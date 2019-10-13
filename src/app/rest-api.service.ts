@@ -43,7 +43,7 @@ export class RestApiService {
   }
 
 
-  getStaticData(params, reqOpts): Observable<any> {
+  getStaticData(params): Observable<any> {
     return this.http.get(apiUrl + params, { observe: 'response' });
     // return forkJoin([response1[0]]);
   }

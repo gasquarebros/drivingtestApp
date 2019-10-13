@@ -15,8 +15,9 @@ export class QuestionsPage implements OnInit {
   public answers: Array<any> = [];
   public currentIndex: number;
   public count: number;
-  public question_language: any = '';
+  public questionLanguage: any = '';
   public chooseOption: any;
+  public appID: string;
 
   constructor(
     private api: RestApiService,
@@ -26,167 +27,67 @@ export class QuestionsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.appID = 'drivingAPP';
     this.questions = [];
     this.answers = [];
     this.count = 0;
     this.currentIndex = 0;
     this.chooseOption = '';
-    this.question_language = 'english';
+    this.questionLanguage = 'english';
     const queryParams = this.route.snapshot.queryParams;
-    if(queryParams !== undefined && queryParams.count != undefined && queryParams.count !='') {
+    if (queryParams !== undefined && queryParams.count !== undefined && queryParams.count !== '') {
       this.count = queryParams.count;
     }
-    
-    if(queryParams !== undefined && queryParams.language != undefined && queryParams.language !='') {
-      this.question_language = queryParams.language;
+    if (queryParams !== undefined && queryParams.language !== undefined && queryParams.language !== '') {
+      this.questionLanguage = queryParams.language;
     }
 
-    if (queryParams !== undefined && queryParams.slug != undefined && queryParams.slug != '') {
+    if (queryParams !== undefined && queryParams.slug !== undefined && queryParams.slug !== '') {
       this.fetchQuestions(queryParams.slug, this.count);
     }
-    
   }
 
   fetchQuestions(slug, count) {
-      const data = [
-        {
-          title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
-          title_tamil: 'வாகனம் ஓட்டும்போது மொபைல் ஃபோனைப் பயன்படுத்துவதற்கான அபராதம் 1,000 டாலருக்கு மிகாமல் அபராதம் அல்லது அதிகபட்சம் 6 மாதங்கள் அல்லது இரண்டும் சிறைத்தண்டனை.',
-          question: 'test',
-          question_tamil: 'சோதனை',
-          image: '',
-          video: '',
-          display_type: 'image',
-          options: [
-            {
-              option: 'true, and most likely licence will also be revoked',
-              option_tamil: 'உண்மை, பெரும்பாலும் உரிமமும் ரத்து செய்யப்படும்',
-              is_answer: 1,
-              id: 1,
-            },
-            {
-              option: 'false',
-              option_tamil: 'தவறு',
-              is_answer: 0,
-              id: 2,
-            },
-            {
-              option: 'true, and most likely licence will not be revoked',
-              option_tamil: 'உண்மை, பெரும்பாலும் உரிமம் ரத்து செய்யப்படாது',
-              is_answer: 0,
-              id: 3,
-            }
-          ]
-        },
-        {
-          title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
-          title_tamil: 'வாகனம் ஓட்டும்போது மொபைல் ஃபோனைப் பயன்படுத்துவதற்கான அபராதம் 1,000 டாலருக்கு மிகாமல் அபராதம் அல்லது அதிகபட்சம் 6 மாதங்கள் அல்லது இரண்டும் சிறைத்தண்டனை.',
-          question: 'test',
-          question_tamil: 'சோதனை',
-          image: '',
-          video: '',
-          display_type: 'image',
-          options: [
-            {
-              option: 'true, and most likely licence will also be revoked',
-              option_tamil: 'உண்மை, பெரும்பாலும் உரிமமும் ரத்து செய்யப்படும்',
-              is_answer: 1,
-              id: 4,
-            },
-            {
-              option: 'false',
-              option_tamil: 'தவறு',
-              is_answer: 0,
-              id: 5,
-            },
-            {
-              option: 'true, and most likely licence will not be revoked',
-              option_tamil: 'உண்மை, பெரும்பாலும் உரிமம் ரத்து செய்யப்படாது',
-              is_answer: 0,
-              id: 6,
-            }
-          ]
-        },
-        {
-          title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
-          title_tamil: 'வாகனம் ஓட்டும்போது மொபைல் ஃபோனைப் பயன்படுத்துவதற்கான அபராதம் 1,000 டாலருக்கு மிகாமல் அபராதம் அல்லது அதிகபட்சம் 6 மாதங்கள் அல்லது இரண்டும் சிறைத்தண்டனை.',
-          question: 'test',
-          question_tamil: 'சோதனை',
-          image: '',
-          video: '',
-          display_type: 'image',
-          options: [
-            {
-              option: 'true, and most likely licence will also be revoked',
-              option_tamil: 'உண்மை, பெரும்பாலும் உரிமமும் ரத்து செய்யப்படும்',
-              is_answer: 1,
-              id: 7,
-            },
-            {
-              option: 'false',
-              option_tamil: 'தவறு',
-              is_answer: 0,
-              id: 8,
-            },
-            {
-              option: 'true, and most likely licence will not be revoked',
-              option_tamil: 'உண்மை, பெரும்பாலும் உரிமம் ரத்து செய்யப்படாது',
-              is_answer: 0,
-              id: 9,
-            }
-          ]
-        },
-        {
-          title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
-          title_tamil: 'வாகனம் ஓட்டும்போது மொபைல் ஃபோனைப் பயன்படுத்துவதற்கான அபராதம் 1,000 டாலருக்கு மிகாமல் அபராதம் அல்லது அதிகபட்சம் 6 மாதங்கள் அல்லது இரண்டும் சிறைத்தண்டனை.',
-          question: 'test',
-          question_tamil: 'சோதனை',
-          image: '',
-          video: '',
-          display_type: 'image',
-          options: [
-            {
-              option: 'true, and most likely licence will also be revoked',
-              option_tamil: 'உண்மை, பெரும்பாலும் உரிமமும் ரத்து செய்யப்படும்',
-              is_answer: 1,
-              id: 10,
-            },
-            {
-              option: 'false',
-              option_tamil: 'தவறு',
-              is_answer: 0,
-              id: 11,
-            },
-            {
-              option: 'true, and most likely licence will not be revoked',
-              option_tamil: 'உண்மை, பெரும்பாலும் உரிமம் ரத்து செய்யப்படாது',
-              is_answer: 0,
-              id: 12,
-            }
-          ]
-        },
-      ];
-      this.questions = data;
-      this.count = this.questions.length;
-      this.question = this.questions[this.currentIndex];
+    let queryParams = '?app_id=' + this.appID;
+    queryParams += 'limit = ' + count;
+    queryParams += 'search_category = ' + slug;
+    this.api.getStaticData('api/quiz' + queryParams).subscribe(result => {
+      const response: any = result;
+      if (response.body !== undefined) {
+        const res = response.body;
+        if (res !== undefined) {
+          if (res.status === 'success') {
+            this.questions = res.data;
+            this.count = this.questions.length;
+            this.question = this.questions[this.currentIndex];
+          } else {
+            // this.formError = res.message;
+          }
+        }
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
   setAnswers() {
-    if(this.answers[this.currentIndex] != undefined) { 
-      this.answers[this.currentIndex] = {title: this.question.title, title_tamil: this.question.title_tamil, selected_option: this.chooseOption};
+    if (this.answers[this.currentIndex] !== undefined) {
+      this.answers[this.currentIndex] = {
+        title: this.question.title, title_tamil: this.question.title_tamil, selected_option: this.chooseOption
+      };
     } else {
       this.answers.push({title: this.question.title, title_tamil: this.question.title_tamil, selected_option: this.chooseOption});
     }
   }
 
   fetchNextQuestion(type) {
-    if(type == 'inc') {
+    if (type === 'inc') {
       this.currentIndex++;
     } else {
       this.currentIndex--;
     }
     this.question = this.questions[this.currentIndex];
-    this.chooseOption = (this.answers[this.currentIndex] != undefined)? this.answers[this.currentIndex].selected_option: '';
+    this.chooseOption = (this.answers[this.currentIndex] !== undefined) ? this.answers[this.currentIndex].selected_option : '';
   }
 
   goPrev() {
@@ -204,7 +105,7 @@ export class QuestionsPage implements OnInit {
   }
 
   getChecked(optionId) {
-    if(this.chooseOption == optionId) {
+    if (this.chooseOption === optionId) {
       return true;
     } else {
       return false;
@@ -217,7 +118,7 @@ export class QuestionsPage implements OnInit {
   }
 
   saveAnswers() {
-    this.router.navigate(['/questions/thankyou'], { queryParams: { percent: '90' , participationId: 1, language: this.question_language} });
+    this.router.navigate(['/questions/thankyou'], { queryParams: { percent: '90' , participationId: 1, language: this.questionLanguage} });
   }
 
 }

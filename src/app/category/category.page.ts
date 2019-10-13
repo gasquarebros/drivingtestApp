@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { RestApiService } from '../rest-api.service';
 @Component({
   selector: 'app-category',
   templateUrl: './category.page.html',
@@ -8,18 +9,22 @@ import { Router } from '@angular/router';
 export class CategoryPage implements OnInit {
   public category: any = [];
   public count: any;
-  public sel_language: string;
+  public selLanguage: string;
 
   slideOptsOne = {
     initialSlide: 0,
     slidesPerView: 3,
     autoplay: false
   };
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private api: RestApiService
+  ) { }
 
   ngOnInit() {
-    this.sel_language = 'english';
-    this.category = [
+    this.selLanguage = 'english';
+    this.fetchCategory();
+    /*this.category = [
       {
         'id': 1,
         'slug':'Basic-Theory-Test',
@@ -42,19 +47,38 @@ export class CategoryPage implements OnInit {
         'count': '200'
       }
 
-    ];
+    ]; */
+  }
+
+  fetchCategory() {
+    this.api.getStaticData('api/category').subscribe(result => {
+      const response: any = result;
+      if (response.body !== undefined) {
+        const res = response.body;
+        if (res !== undefined) {
+          if (res.status === 'success') {
+            this.category = res.data;
+          } else {
+            this.category = [];
+            // this.formError = res[0].message;
+          }
+        }
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
   changeValue(data, type) {
-    if(type == 'count') {
+    if (type === 'count') {
       this.count = data.detail.value;
     } else {
-      this.sel_language = data.detail.value;
+      this.selLanguage = data.detail.value;
     }
   }
 
   startTest(category) {
-    this.router.navigate(['/questions'], { queryParams: { slug: category, limit: this.count, language: this.sel_language } });
+    this.router.navigate(['/questions'], { queryParams: { slug: category, limit: this.count, language: this.selLanguage } });
   }
 
 }
