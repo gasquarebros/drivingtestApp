@@ -28,7 +28,7 @@
             <ion-item *ngFor="let options of question.options;let i=index;">
               <ion-label class="question_opttext" text-wrap *ngIf="questionLanguage == 'english'">{{options.option}}</ion-label>
               <ion-label class="question_opttext" text-wrap *ngIf="questionLanguage == 'tamil'">{{options.option_tamil}}</ion-label>
-              <ion-radio slot="start" [checked]="getChecked(options.id)" (ionSelect)="selectOption(options.id)"  value="{{options.id}}"></ion-radio>
+              <ion-radio slot="start" [checked]="getChecked(options.id)" (ionSelect)="selectOption(options)"  value="{{options}}"></ion-radio>
             </ion-item>
         </ion-radio-group>
       </ion-list>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { RestApiService } from '../rest-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import * as _ from 'underscore';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.page.html',
@@ -18,6 +18,7 @@ export class QuestionsPage implements OnInit {
   public questionLanguage: any = '';
   public chooseOption: any;
   public appID: string;
+  public userInfo: any = '';
 
   constructor(
     private api: RestApiService,
@@ -71,12 +72,39 @@ export class QuestionsPage implements OnInit {
   }
 
   setAnswers() {
+    let selectedoptions = '';
+    let correctAnswer =  '';
+    let isCorrect = 0;
+    const selectedOptionId = this.chooseOption.id;
+    if(this.questionLanguage == 'english') {
+      selectedoptions = this.chooseOption.option;
+    } else {
+      selectedoptions = this.chooseOption.option_tamil;
+    }
+    _.each(this.question.options, (options: any) => {
+      if(options.is_answer == 1) {
+        if(selectedOptionId === options.id) {
+          isCorrect = 1;
+        }
+        correctAnswer = (this.questionLanguage == 'english') ? options.option: options.option_tamil;
+      }
+    });
     if (this.answers[this.currentIndex] !== undefined) {
       this.answers[this.currentIndex] = {
-        title: this.question.title, title_tamil: this.question.title_tamil, selected_option: this.chooseOption
+        'id': this.question.id, 
+        'title': (this.questionLanguage == 'english') ? this.question.title : this.question.title_tamil, 
+        'selected_option': selectedoptions, 
+        'isCorrect': isCorrect, 
+        'correct_option': correctAnswer
       };
     } else {
-      this.answers.push({title: this.question.title, title_tamil: this.question.title_tamil, selected_option: this.chooseOption});
+      this.answers.push({
+        'id': this.question.id, 
+        'title': (this.questionLanguage == 'english') ? this.question.title : this.question.title_tamil, 
+        'selected_option': selectedoptions, 
+        'isCorrect': isCorrect, 
+        'correct_option': correctAnswer
+      });
     }
   }
 
@@ -100,12 +128,12 @@ export class QuestionsPage implements OnInit {
     this.fetchNextQuestion('inc');
   }
 
-  selectOption(optionId) {
-    this.chooseOption = optionId;
+  selectOption(options) {
+    this.chooseOption = options;
   }
 
   getChecked(optionId) {
-    if (this.chooseOption === optionId) {
+    if (this.chooseOption !='' && this.chooseOption.id === optionId) {
       return true;
     } else {
       return false;
@@ -118,7 +146,25 @@ export class QuestionsPage implements OnInit {
   }
 
   saveAnswers() {
-    this.router.navigate(['/questions/thankyou'], { queryParams: { percent: '90' , participationId: 1, language: this.questionLanguage} });
+    const body = new FormData();
+    body.append('quiz_participation_user_id', (this.userInfo != '')? this.userInfo.id: '');
+    body.append('quiz_participation_language', this.questionLanguage);
+    body.append('quiz_participation_count', this.count.toString());
+    body.append('quiz_participation_percent', '');
+    body.append('quiz_questions', JSON.stringify(this.answers));
+    this.api.postData('api/login/register', body).subscribe(result => {
+      const res: any = result;
+      if (res !== undefined) {
+        if (res[0].status === 'success') {
+          this.router.navigate(['/questions/thankyou'], { queryParams: { percent: '90' , participationId: 1, language: this.questionLanguage} });
+          // this.router.navigateByUrl('/login');
+        } else {
+          // this.formError = res[0].form_error;
+        }
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
 }
