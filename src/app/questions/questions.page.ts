@@ -156,7 +156,7 @@ export class QuestionsPage implements OnInit {
       const res: any = result;
       if (res !== undefined) {
         if (res[0].status === 'success') {
-          this.router.navigate(['/questions/thankyou'], { queryParams: { percent: '90' , participationId: 1, language: this.questionLanguage} });
+          this.router.navigate(['/questions/thankyou'], { queryParams: { percent: '90' , participationId: res[0].data.id, language: this.questionLanguage} });
           // this.router.navigateByUrl('/login');
         } else {
           // this.formError = res[0].form_error;

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '../../../../node_modules/@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController, PopoverController, ModalController, LoadingController, ToastController } from '@ionic/angular';
 import { ReportComponent } from './../report/report.component';
+import { RestApiService } from '../../rest-api.service';
 
 @Component({
   selector: 'app-thankyou',
@@ -19,21 +20,22 @@ export class ThankyouComponent implements OnInit {
     public modalController: ModalController,
     public loadingController: LoadingController,
     private toastCtrl: ToastController,
-    public router: Router
+    public router: Router,
+    private api: RestApiService
   ) { }
 
   ngOnInit() {
     const queryParams = this.route.snapshot.queryParams;
-    if (queryParams !== undefined && queryParams.percent != undefined && queryParams.percent != '') {
+    if (queryParams !== undefined && queryParams.percent !== undefined && queryParams.percent !== '') {
       this.percentage = queryParams.percent;
     }
-    if (queryParams !== undefined && queryParams.participationId != undefined && queryParams.participationId != '') {
+    if (queryParams !== undefined && queryParams.participationId !== undefined && queryParams.participationId !== '') {
       this.participationId = queryParams.participationId;
     }
-    if (queryParams !== undefined && queryParams.language != undefined && queryParams.language != '') {
+    if (queryParams !== undefined && queryParams.language !== undefined && queryParams.language !== '') {
       this.language = queryParams.language;
     } else {
-      this.language = 'english'
+      this.language = 'english';
     }
   }
 

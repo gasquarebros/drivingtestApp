@@ -21,7 +21,7 @@ export class ReportComponent implements OnInit {
   public participationId: any;
   public reportQuestionSection: any;
 
-  public question_language: string;
+  public questionLanguage: string;
 
   validations_form: FormGroup;
   validation_messages = {
@@ -29,7 +29,7 @@ export class ReportComponent implements OnInit {
       { type: 'required', message: 'Answer is required.' }
     ]
   };
-  
+
   constructor(
     public formBuilder: FormBuilder,
     public api: RestApiService,
@@ -41,10 +41,9 @@ export class ReportComponent implements OnInit {
     this.reportQuestionId = '';
     this.reportQuestionSection = '';
     this.showDetail = false;
-    this.question_language = 'english';
-    
+    this.questionLanguage = 'english';
     this.participationId = this.navParams.data.participationId;
-    this.question_language = this.navParams.data.language;
+    this.questionLanguage = this.navParams.data.language;
     this.validations_form = this.formBuilder.group({
       answer: new FormControl('', Validators.compose([
         Validators.required
@@ -53,70 +52,40 @@ export class ReportComponent implements OnInit {
     this.fetchQuestions(this.participationId);
   }
 
-  
   fetchQuestions(participationId) {
-    const data = [
-      {
-        id: 1,
-        title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
-        title_tamil: 'வாகனம் ஓட்டும்போது மொபைல் ஃபோனைப் பயன்படுத்துவதற்கான அபராதம் 1,000 டாலருக்கு மிகாமல் அபராதம் அல்லது அதிகபட்சம் 6 மாதங்கள் அல்லது இரண்டும் சிறைத்தண்டனை.',
-        question: 'test',
-        question_tamil: 'சோதனை',
-        image: '',
-        video: '',
-        display_type: 'image',
-        isCorrect: false,
-        your_answer: 'false',
-        correct_answer: 'both'
-      },
-      {
-        id: 2,
-        title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
-        title_tamil: 'வாகனம் ஓட்டும்போது மொபைல் ஃபோனைப் பயன்படுத்துவதற்கான அபராதம் 1,000 டாலருக்கு மிகாமல் அபராதம் அல்லது அதிகபட்சம் 6 மாதங்கள் அல்லது இரண்டும் சிறைத்தண்டனை.',
-        question: 'test',
-        question_tamil: 'சோதனை',
-        image: '',
-        video: '',
-        display_type: 'image',
-        isCorrect: true,
-        your_answer: 'both',
-        correct_answer: 'both'
-      },
-      {
-        id: 3,
-        title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
-        title_tamil: 'வாகனம் ஓட்டும்போது மொபைல் ஃபோனைப் பயன்படுத்துவதற்கான அபராதம் 1,000 டாலருக்கு மிகாமல் அபராதம் அல்லது அதிகபட்சம் 6 மாதங்கள் அல்லது இரண்டும் சிறைத்தண்டனை.',
-        question: 'test',
-        question_tamil: 'சோதனை',
-        image: '',
-        video: '',
-        display_type: 'image',
-        isCorrect: false,
-        your_answer: 'false',
-        correct_answer: 'both'
-      },
-      {
-        id: 4,
-        title: 'The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both.',
-        title_tamil: 'வாகனம் ஓட்டும்போது மொபைல் ஃபோனைப் பயன்படுத்துவதற்கான அபராதம் 1,000 டாலருக்கு மிகாமல் அபராதம் அல்லது அதிகபட்சம் 6 மாதங்கள் அல்லது இரண்டும் சிறைத்தண்டனை.',
-        question: 'test',
-        question_tamil: 'சோதனை',
-        image: '',
-        video: '',
-        display_type: 'image',
-        isCorrect: false,
-        your_answer: 'false',
-        correct_answer: 'both'
-      },
-    ];
-    this.questions = data;
-  } 
+    const body = new FormData();
+    body.append('participate_id', participationId.toString());
+    this.api.postData('api/quiz/retreive-participate', body).subscribe(result => {
+      const res: any = result;
+      if (res !== undefined) {
+        if (res[0].status === 'success') {
+          console.log(res);
+          const date = res[0].data;
+          _.each(date.options, (option: any) => {
+            const newopt = {
+              id: option.quiz_participate_options_questionId,
+              title: option.quiz_participate_options_question,
+              title_tamil: option.quiz_participate_options_question,
+              isCorrect: (option.quiz_participate_options_iscorrect === 1) ? true : false,
+              your_answer: option.quiz_participate_options_options_answered,
+              correct_answer: option.quiz_participate_options_correct_answer
+            };
+            this.questions.push(newopt);
+          });
+        } else {
+          this.questions = [];
+        }
+      }
+    }, err => {
+      console.log(err);
+    });
+  }
 
   showForm(questionId) {
     this.showDetail = false;
     this.reportQuestionId = questionId;
     _.each(this.questions, (question: any) => {
-      if (question.id == questionId) {
+      if (question.id === questionId) {
         this.reportQuestionSection = question;
       }
     });
@@ -131,15 +100,15 @@ export class ReportComponent implements OnInit {
   reportQuestion(values) {
     this.formError = '';
     const body = new FormData();
-    body.append('questionId', this.reportQuestionId);
+    body.append('question_id', this.reportQuestionId);
     body.append('answer', values.answer);
-    this.api.postData('api/reportQuestion', body).subscribe(result => {
+    this.api.postData('api/quiz/report-question', body).subscribe(result => {
       const res: any = result;
       if (res !== undefined) {
         if (res[0].status === 'success') {
           this.showDetail = false;
         } else {
-          this.formError = res[0].message;
+          this.formError = res[0].error;
         }
       }
     }, err => {

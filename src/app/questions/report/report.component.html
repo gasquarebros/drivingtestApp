@@ -12,8 +12,8 @@
 <ion-content padding>
   <div *ngFor="let options of questions;let i=index;"  >
     <ion-item (click)="showForm(options.id)" [detail]="(reportQuestionSection.id == options.id) ? 'false': 'true'">
-      <h3 class="question_text" *ngIf="question_language == 'english'"><ion-icon name="checkmark-circle" size="medium" class="tick icon" *ngIf="options.isCorrect"></ion-icon><ion-icon name="close-circle" class="false icon" size="medium" *ngIf="options.isCorrect == false"></ion-icon><span>{{options.title}}</span></h3> 
-      <h3 class="question_text" *ngIf="question_language == 'tamil'"><ion-icon name="checkmark-circle" size="medium" class="tick icon" *ngIf="options.isCorrect"></ion-icon><ion-icon name="close-circle" class="false icon" size="medium" *ngIf="options.isCorrect == false"></ion-icon><span>{{options.title_tamil}}</span></h3>
+      <h3 class="question_text" *ngIf="questionLanguage == 'english'"><ion-icon name="checkmark-circle" size="medium" class="tick icon" *ngIf="options.isCorrect"></ion-icon><ion-icon name="close-circle" class="false icon" size="medium" *ngIf="options.isCorrect == false"></ion-icon><span>{{options.title}}</span></h3> 
+      <h3 class="question_text" *ngIf="questionLanguage == 'tamil'"><ion-icon name="checkmark-circle" size="medium" class="tick icon" *ngIf="options.isCorrect"></ion-icon><ion-icon name="close-circle" class="false icon" size="medium" *ngIf="options.isCorrect == false"></ion-icon><span>{{options.title_tamil}}</span></h3>
     </ion-item>
     <div class="answer_section">
       <p class="provided_answer" *ngIf="options.isCorrect == false">
