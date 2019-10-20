@@ -54,8 +54,7 @@ ion-button {
     }
 }
 
-ion-input {
-}
+
 .col1 {
     width: 48%;
     float: left;
@@ -102,8 +101,10 @@ ion-label {
     font-size: 15px !important;
 }
 .submit-btn {
-    width: 50%;
-    margin:0 auto;
+    width: 47%;
+    margin: 0 auto;
+    float: left;
+    margin-right: 7px;
 }
 .error-message {
     color: red;

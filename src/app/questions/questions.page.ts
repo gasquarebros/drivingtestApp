@@ -91,19 +91,19 @@ export class QuestionsPage implements OnInit {
     });
     if (this.answers[this.currentIndex] !== undefined) {
       this.answers[this.currentIndex] = {
-        'id': this.question.id, 
-        'title': (this.questionLanguage == 'english') ? this.question.title : this.question.title_tamil, 
-        'selected_option': selectedoptions, 
-        'isCorrect': isCorrect, 
-        'correct_option': correctAnswer
+        'question_id': this.question.id, 
+        'question': (this.questionLanguage == 'english') ? this.question.title : this.question.title_tamil, 
+        'option_answer': selectedoptions, 
+        'is_correct': isCorrect, 
+        'correct_answer': correctAnswer
       };
     } else {
       this.answers.push({
-        'id': this.question.id, 
-        'title': (this.questionLanguage == 'english') ? this.question.title : this.question.title_tamil, 
-        'selected_option': selectedoptions, 
-        'isCorrect': isCorrect, 
-        'correct_option': correctAnswer
+        'question_id': this.question.id, 
+        'question': (this.questionLanguage == 'english') ? this.question.title : this.question.title_tamil, 
+        'option_answer': selectedoptions, 
+        'is_correct': isCorrect, 
+        'correct_answer': correctAnswer
       });
     }
   }
@@ -147,12 +147,12 @@ export class QuestionsPage implements OnInit {
 
   saveAnswers() {
     const body = new FormData();
-    body.append('quiz_participation_user_id', (this.userInfo != '')? this.userInfo.id: '');
-    body.append('quiz_participation_language', this.questionLanguage);
-    body.append('quiz_participation_count', this.count.toString());
-    body.append('quiz_participation_percent', '');
-    body.append('quiz_questions', JSON.stringify(this.answers));
-    this.api.postData('api/login/register', body).subscribe(result => {
+    body.append('userid', (this.userInfo != '')? this.userInfo.id: '');
+    body.append('question_language', this.questionLanguage);
+    body.append('limit', this.count.toString());
+    body.append('percent', '');
+    body.append('questions', JSON.stringify(this.answers));
+    this.api.postData('api/quiz/participate', body).subscribe(result => {
       const res: any = result;
       if (res !== undefined) {
         if (res[0].status === 'success') {

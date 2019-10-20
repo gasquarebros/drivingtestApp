@@ -97,7 +97,7 @@ export class LoginPage implements OnInit {
     this.formError = '';
     const body = new FormData();
     body.append('email', values.email);
-    this.api.postData('api/login', body).subscribe(result => {
+    this.api.postData('api/login/requestpasswordreset', body).subscribe(result => {
       const res: any = result;
       if (res !== undefined) {
         if (res[0].status === 'success') {
@@ -127,7 +127,7 @@ export class LoginPage implements OnInit {
           this.myApp.loggedIn();
           this.router.navigateByUrl('/category');
         } else {
-          this.formError = res[0].message;
+          this.formError = res[0].form_error;
         }
       }
     }, err => {
