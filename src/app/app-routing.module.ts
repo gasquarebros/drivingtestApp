@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
   { path: 'category', loadChildren: './category/category.module#CategoryPageModule' },
   { path: 'questions', loadChildren: './questions/questions.module#QuestionsPageModule' },
+  { path: 'myprofile', loadChildren: './myprofile/myprofile.module#MyprofilePageModule' },
 ];
 
 @NgModule({

@@ -41,6 +41,7 @@ export class ReportComponent implements OnInit {
     this.reportQuestionId = '';
     this.reportQuestionSection = '';
     this.showDetail = false;
+    this.questions = [];
     this.questionLanguage = 'english';
     this.participationId = this.navParams.data.participationId;
     this.questionLanguage = this.navParams.data.language;
@@ -108,7 +109,7 @@ export class ReportComponent implements OnInit {
         if (res[0].status === 'success') {
           this.showDetail = false;
         } else {
-          this.formError = res[0].error;
+          this.formError = (res[0].error.length > 0 ) ? res[0].error: res[0].data.message;
         }
       }
     }, err => {

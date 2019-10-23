@@ -140,6 +140,16 @@ export class QuestionsPage implements OnInit {
     }
   }
 
+  getPercentage() {
+    let correctCount = 0;
+    _.each(this.answers, (answer: any) => {
+      if(answer.is_correct == 1) {
+        correctCount += 1;
+      }
+    });
+    return ((correctCount/this.count)*100).toFixed(2);
+  }
+
   submitAnswers() {
     this.setAnswers();
     this.saveAnswers();
@@ -147,16 +157,17 @@ export class QuestionsPage implements OnInit {
 
   saveAnswers() {
     const body = new FormData();
+    const percent = this.getPercentage();
     body.append('userid', (this.userInfo != '')? this.userInfo.id: '');
     body.append('question_language', this.questionLanguage);
     body.append('limit', this.count.toString());
-    body.append('percent', '');
+    body.append('percent', percent);
     body.append('questions', JSON.stringify(this.answers));
     this.api.postData('api/quiz/participate', body).subscribe(result => {
       const res: any = result;
       if (res !== undefined) {
         if (res[0].status === 'success') {
-          this.router.navigate(['/questions/thankyou'], { queryParams: { percent: '90' , participationId: res[0].data.id, language: this.questionLanguage} });
+          this.router.navigate(['/questions/thankyou'], { queryParams: { percent: percent , participationId: res[0].data.id, language: this.questionLanguage} });
           // this.router.navigateByUrl('/login');
         } else {
           // this.formError = res[0].form_error;
