@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastController, LoadingController } from '@ionic/angular';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import * as _ from 'underscore';
+import { MustMatch } from './mustMatch.validator';
+
 
 @Component({
   selector: 'app-myprofile',
@@ -18,8 +20,20 @@ export class MyprofilePage implements OnInit {
 
   public formError: any;
 
-
+  validations_changePassword: FormGroup;
   validations_form: FormGroup;
+  valildation_changePassMessage = {
+    'password': [
+      { type: 'required', message: 'Password is required.' },
+      { type: 'minlength', message: 'Password must be at least 5 characters long.' },
+      { type: 'maxlength', message: 'Password cannot be more than 255 characters long.' },
+      { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number.' }
+    ],
+    'confirmPassword': [
+      { type: 'required', message: 'Password is required.' },
+      { type: 'mustMatch', message: 'Password and Confirm Password not matched'}
+    ]
+  }
   validation_messages = {
     'username': [
       { type: 'required', message: 'Username is required.' },
@@ -48,6 +62,7 @@ export class MyprofilePage implements OnInit {
     ]
   };
 
+
   constructor(public loadingController: LoadingController,
     private api: RestApiService,
     public authService: AuthService,
@@ -58,11 +73,93 @@ export class MyprofilePage implements OnInit {
 
   ngOnInit() {
     const queryParams = this.route.snapshot.queryParams;
+    this.validations_changePassword = this.formBuilder.group({
+      password: new FormControl('', Validators.compose([
+        Validators.maxLength(25),
+        Validators.minLength(5),
+        Validators.required
+      ])),
+      confirmPassword: new FormControl('', Validators.compose([
+        Validators.required
+      ]))
+    }, {
+      validator: MustMatch('password', 'confirmPassword')
+    });
+    this.validations_form = this.formBuilder.group({
+      firstname: new FormControl('', Validators.compose([
+        Validators.maxLength(25),
+        Validators.minLength(5),
+        Validators.required
+      ])),
+      lastname: new FormControl( '', Validators.compose([
+        Validators.maxLength(25),
+        Validators.minLength(1)
+      ])),
+      dob: new FormControl( ''),
+      gender: new FormControl( ''),
+      username: new FormControl('', Validators.compose([
+        Validators.maxLength(25),
+        Validators.minLength(5),
+        Validators.required
+      ])),
+      email: new FormControl('', Validators.compose([
+        Validators.pattern('[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})'),
+        Validators.required
+      ])),
+      phoneno: new FormControl('', Validators.compose([
+        Validators.maxLength(12),
+        Validators.minLength(5),
+        Validators.pattern('[0-9]{5,10}'),
+        Validators.required
+      ])),
+      password: new FormControl('', Validators.compose([
+        Validators.maxLength(25),
+        Validators.minLength(5),
+        Validators.required
+      ])),
+    });
+
     this.authService.getUserInfo().then(items => {
-      const userInfo = items;
+      this.userInfo = items;
+
+      this.validations_form = new FormGroup({
+        firstname: new FormControl(this.userInfo.firstname, Validators.compose([
+          Validators.maxLength(25),
+          Validators.minLength(5),
+          Validators.required
+        ])),
+        lastname: new FormControl( this.userInfo.lastname, Validators.compose([
+          Validators.maxLength(25),
+          Validators.minLength(1)
+        ])),
+        dob: new FormControl(this.userInfo.birthday),
+        gender: new FormControl(this.userInfo.gender),
+        username: new FormControl(this.userInfo.username, Validators.compose([
+          Validators.maxLength(25),
+          Validators.minLength(5),
+          Validators.required
+        ])),
+        email: new FormControl(this.userInfo.email, Validators.compose([
+          Validators.pattern('[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})'),
+          Validators.required
+        ])),
+        phoneno: new FormControl(this.userInfo.phoneno, Validators.compose([
+          Validators.maxLength(12),
+          Validators.minLength(5),
+          Validators.pattern('[0-9]{5,10}'),
+          Validators.required
+        ])),
+      });
+
     });
     //this.presentLoadingWithOptions();
     //this.loadingController.dismiss();
+  }
+
+  private validateAreEqual(fieldControl: FormControl) {
+    return fieldControl.value === this.validations_changePassword.get("Password").value ? null : {
+        NotEqual: true
+    };
   }
 
   async presentLoadingWithOptions() {
@@ -86,11 +183,16 @@ export class MyprofilePage implements OnInit {
     toast.present();
   }
 
-  updateProfile(formValues) {
+  updateProfile(form) {
     const body = new FormData();
-    _.each(formValues, function(val: any, key: any) {
-      body.append(key, val);
-    });
+    body.append('firstname', form.firstname);
+    body.append('lastname', form.lastname);
+    body.append('username', form.username);
+    body.append('email', form.email);
+    body.append('password', form.password);
+    body.append('birthday', form.dob);
+    body.append('gender', form.gender);
+    body.append('phoneno', form.phoneno);
     body.append('user_id', this.userInfo.bg_user_id);
     this.api.postData('profile/updateInfo', body).subscribe(result => {
       const res: any = result;
