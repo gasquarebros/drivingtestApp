@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RestApiService } from '../rest-api.service';
 import { LoadingController } from '@ionic/angular';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-category',
@@ -12,19 +13,26 @@ export class CategoryPage implements OnInit {
   public category: any = [];
   public count: any;
   public selLanguage: string;
+  public selDifficulity: string;
+  public userInfo;
 
   slideOptsOne = {
     initialSlide: 0,
-    slidesPerView: 3,
+    slidesPerView: 2,
     autoplay: false
   };
   constructor(
     private router: Router,
     private api: RestApiService,
+    public authService: AuthService,
     public loadingController: LoadingController,
   ) { }
 
   ngOnInit() {
+    this.selDifficulity = 'demo';
+    this.authService.getUserInfo().then(items => {
+      this.userInfo = items;
+    });
     this.selLanguage = 'english';
     this.fetchCategory();
   }
@@ -62,13 +70,20 @@ export class CategoryPage implements OnInit {
   changeValue(data, type) {
     if (type === 'count') {
       this.count = data.detail.value;
+    } else if(type === 'difficulity') { 
+      this.selDifficulity = data.detail.value;
     } else {
       this.selLanguage = data.detail.value;
     }
   }
 
   startTest(category) {
-    this.router.navigate(['/questions'], { queryParams: { slug: category, limit: this.count, language: this.selLanguage } });
+    if(this.selDifficulity == 'demo') {
+      this.router.navigate(['/demo-landing'], { queryParams: { slug: category, language: this.selLanguage}});
+    } else {
+      this.router.navigate(['/level-landing'], { queryParams: { slug: category, language: this.selLanguage}});
+    }
+    // this.router.navigate(['/questions'], { queryParams: { slug: category, limit: this.count, language: this.selLanguage } });
   }
 
 }

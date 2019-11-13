@@ -1,3 +1,93 @@
+.logopart {
+    ion-avatar {
+        float:left;
+    }
+    .category-name {
+        float: left;
+        padding: 15px;
+    }
+}
+.half {
+    width: 50%;
+    float: left;
+    .flr {
+        float:right;
+    }
+    .timersec {
+        width: 100%;
+        float: left;
+        .closeIcon {
+            margin-left: 10px;
+            background: #ccc;
+            padding: 0px 0px 0px 6px;
+            border-radius: 50%;
+            width: 20px;
+            height: 19px;
+            cursor: pointer;
+        }
+    }
+    .completionStep {
+        background-color: #ccc;
+        float: left;
+        display: block;
+        width: 100%;
+        margin-top: 5px;
+        height: 9px;
+        cursor: pointer;
+        #background {
+            width: 10%;
+            height: 100%;
+            background-color: green;
+            z-index: 1;
+            display: block;
+            float: left;
+        }
+    }
+}
+  /*
+  #countdown {
+    position: relative;
+    margin: auto;
+    text-align: center;
+  }
+  
+  #countdown-number {
+    color: black;
+    display: inline-block;
+    line-height: 40px;
+    position: absolute;
+    top: 13px;
+    right: 30px;
+  }
+  
+  svg {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 100px;
+    height: 80px;
+    transform: rotateY(-180deg) rotateZ(-90deg);
+  }
+  
+  svg circle {
+    stroke-dasharray: 200px;
+    stroke-dashoffset: 0px;
+    stroke-linecap: round;
+    stroke-width: 2px;
+    stroke: black;
+    fill: none;
+    // animation: countdown 10s linear infinite forwards;
+  }
+  
+  @keyframes countdown {
+    from {
+      stroke-dashoffset: 0px;
+    }
+    to {
+      stroke-dashoffset: 200px;
+    }
+  }
+*/
 .back {
     width: 10%;
     cursor: pointer;
@@ -26,6 +116,7 @@
 }
 .question_text {
     font-size:15px; 
+    font-weight: bold;
 }
 .question_opttext {
     font-size: 13px;
@@ -45,4 +136,19 @@
 .redbtn {
     background: red;
     border-top: 1px solid red;
+}
+
+.sizebox {
+    height: 50px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    .textbox {
+        margin: 0 auto;
+        text-align: center;
+        padding: 15px 0px 0px 0px;
+        color: #ccc;
+    }
+    .active {
+        color: #000;
+    }
 }

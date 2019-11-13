@@ -3,6 +3,7 @@ import { AuthService } from '../auth/auth.service';
 import { RestApiService } from '../rest-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'underscore';
+import { timer } from 'rxjs';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.page.html',
@@ -19,6 +20,13 @@ export class QuestionsPage implements OnInit {
   public chooseOption: any;
   public appID: string;
   public userInfo: any = '';
+  public categoryName: string = '';
+
+  public timeLeft: number = 60;
+  public interval;
+  public displayTime: string = '';
+
+  public showallQuestions: boolean = false;
 
   constructor(
     private api: RestApiService,
@@ -28,6 +36,7 @@ export class QuestionsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.categoryName = "Basic Theory Test";
     this.appID = 'drivingAPP';
     this.questions = [];
     this.answers = [];
@@ -35,6 +44,8 @@ export class QuestionsPage implements OnInit {
     this.currentIndex = 0;
     this.chooseOption = '';
     this.questionLanguage = 'english';
+    //this.categoryName = "";
+    this.displayTime = "01:00";
     const queryParams = this.route.snapshot.queryParams;
     if (queryParams !== undefined && queryParams.count !== undefined && queryParams.count !== '') {
       this.count = queryParams.count;
@@ -61,6 +72,10 @@ export class QuestionsPage implements OnInit {
             this.questions = res.data;
             this.count = this.questions.length;
             this.question = this.questions[this.currentIndex];
+            this.categoryName = "Basic Theory Test";
+            this.count = 2;
+            this.getCountPercentage();
+            this.startTimer();
           } else {
             // this.formError = res.message;
           }
@@ -108,6 +123,10 @@ export class QuestionsPage implements OnInit {
     }
   }
 
+  showList() {
+    this.showallQuestions = true;
+  }
+
   fetchNextQuestion(type) {
     if (type === 'inc') {
       this.currentIndex++;
@@ -116,6 +135,15 @@ export class QuestionsPage implements OnInit {
     }
     this.question = this.questions[this.currentIndex];
     this.chooseOption = (this.answers[this.currentIndex] !== undefined) ? this.answers[this.currentIndex].selected_option : '';
+    this.getCountPercentage();
+  }
+
+  getCountPercentage() {
+    const questionper: number = ((this.currentIndex+1)/this.count)*100;
+    const remainper: number = 100 - questionper; 
+    console.log(this.count);
+    console.log(questionper);
+    document.getElementById('background').style.cssText = 'width: '+questionper+'%';
   }
 
   goPrev() {
@@ -128,12 +156,20 @@ export class QuestionsPage implements OnInit {
     this.fetchNextQuestion('inc');
   }
 
+  getQuestions(index) {
+    this.showallQuestions = false;
+    this.currentIndex = index;
+    this.question = this.questions[this.currentIndex];
+    this.chooseOption = (this.answers[this.currentIndex] !== undefined) ? this.answers[this.currentIndex].selected_option : '';
+    this.getCountPercentage();
+  }
+
   selectOption(options) {
     this.chooseOption = options;
   }
 
   getChecked(optionId) {
-    if (this.chooseOption !='' && this.chooseOption.id === optionId) {
+    if (this.chooseOption  != undefined && this.chooseOption !='' && this.chooseOption.id === optionId) {
       return true;
     } else {
       return false;
@@ -176,6 +212,34 @@ export class QuestionsPage implements OnInit {
     }, err => {
       console.log(err);
     });
+  }
+
+  startTimer() {
+    // document.querySelector("circle").style.cssText = 'animation: countdown 60s linear infinite forwards';
+    this.interval = setInterval(() => {
+      if(this.timeLeft > 0) {
+        this.timeLeft--;
+        const min = Math.floor(this.timeLeft/60);
+        const sec = Math.floor(this.timeLeft%60);
+        const hour = Math.floor(min/60);
+        this.displayTime = ("0" + hour).slice(-2) + ':' + ("0" + min).slice(-2) + ':' + ("0" + sec).slice(-2);
+      } else {
+        this.pauseTimer();
+        this.submitAnswers();
+      }
+    },1000)
+  }
+
+  pauseTimer() {
+    clearInterval(this.interval);
+  }
+
+  getAnswered(index) {
+    if (this.answers[index] !== undefined) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

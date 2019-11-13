@@ -12,6 +12,8 @@ const routes: Routes = [
   { path: 'category', loadChildren: './category/category.module#CategoryPageModule' },
   { path: 'questions', loadChildren: './questions/questions.module#QuestionsPageModule' },
   { path: 'myprofile', loadChildren: './myprofile/myprofile.module#MyprofilePageModule' },
+  { path: 'demo-landing', loadChildren: './demo-landing/demo-landing.module#DemoLandingPageModule' },
+  { path: 'level-landing', loadChildren: './level-landing/level-landing.module#LevelLandingPageModule' },
 ];
 
 @NgModule({

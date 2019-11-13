@@ -20,13 +20,20 @@
                 </div>
                 <h3 class="count">{{cat.count}} Questions</h3>
                 <div class="selectpart">
+                  <!--
                   <ion-select (ionChange)="changeValue($event, 'count')" value="20" okText="Okay" cancelText="Dismiss">
                     <ion-select-option value="20">20</ion-select-option>
                     <ion-select-option value="30">30</ion-select-option>
                     <ion-select-option value="40">40</ion-select-option>
                     <ion-select-option value="50">50</ion-select-option>
                     <ion-select-option value="-1">All</ion-select-option>
+                  </ion-select>-->
+
+                  <ion-select (ionChange)="changeValue($event, 'difficulity')" value="demo" okText="Okay" cancelText="Dismiss">
+                    <ion-select-option value="demo">Demo</ion-select-option>
+                    <ion-select-option *ngIf="userInfo != undefined && userInfo.id != ''" value="level">Level Based</ion-select-option>
                   </ion-select>
+
                   <ion-select (ionChange)="changeValue($event, 'language')" value="english" okText="Okay" cancelText="Dismiss">
                       <ion-select-option value="english">English</ion-select-option>
                       <ion-select-option value="tamil">Tamil</ion-select-option>

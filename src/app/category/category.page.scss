@@ -1,3 +1,6 @@
+.category-section {
+    width: 100%;
+}
 .content_orange {
     font-size: 13px; 
     min-height: 90px;
@@ -10,6 +13,11 @@
     max-height: 100px;
     min-height: 100px;
     float: left;
+    width: 100%;
+    margin: 0 auto;
+    img {
+        max-height: 100px;
+    }
 }
 .count {
     font-family: sans-serif,arial, verdana; 
