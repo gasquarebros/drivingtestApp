@@ -1,0 +1,14 @@
+.sizebox {
+    height: 50px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    .textbox {
+        margin: 0 auto;
+        text-align: center;
+        padding: 15px 0px 0px 0px;
+    }
+}
+.disabled {
+    pointer-events: none;
+    background: #ccc;
+}

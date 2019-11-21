@@ -28,11 +28,11 @@
     </div>
   </ion-toolbar>
   <ion-toolbar>
-    <div class="half">
+    <div class="half" *ngIf="questions.length > 0">
       <span class="question_content">Q{{currentIndex + 1}} of {{count}}</span>
     </div>
-    <div class="half">
-      <div class="timersec"><span class="closeIcon flr">x</span><span class="timer flr">{{displayTime}}</span></div>
+    <div class="half" *ngIf="questions.length > 0">
+      <div class="timersec" *ngIf="type == 'level'"><span class="closeIcon flr">x</span><span class="timer flr">{{displayTime}}</span></div>
       <p class="completionStep" (click)="showList()" id="completionStep"><span id="background">&nbsp;</span></p>
     </div>
   </ion-toolbar>
@@ -60,7 +60,7 @@
   </ion-toolbar>-->
 </ion-header>
 
-<ion-content padding *ngIf="showallQuestions">
+<ion-content padding *ngIf="showallQuestions && questions.length > 0">
     <ion-grid>
       <ion-row *ngIf="questions.length > 0">
         <ion-col size="3" class="demo-sections" *ngFor="let question of questions;let i=index;" (click)="getQuestions(i)">
@@ -71,7 +71,7 @@
       </ion-row>
     </ion-grid>
 </ion-content>
-<ion-content padding *ngIf="showallQuestions == false">
+<ion-content padding *ngIf="showallQuestions == false && questions.length > 0">
   <div class="questions_part">
     <div class="image_part" *ngIf="question.image !='' && (question.display_type == 'both' || question.display_type == 'image')">
 
@@ -97,8 +97,14 @@
       </ion-list>
   </div>
 </ion-content>
+<ion-content padding *ngIf="questions.length == 0">
+  <p>No Questions Available</p>
+  <div col="12" class="width50 redbtn ptr" (click)="goBack()">
+    <span class="txt">Back</span>
+  </div>
+</ion-content>
 <ion-footer>
-  <ion-toolbar *ngIf="showallQuestions == false">
+  <ion-toolbar *ngIf="showallQuestions == false && questions.length > 0">
       <div col="6" [ngClass]="{'disable-events' : currentIndex <= 0}" class="width50 blkbtn ptr" (click)="goPrev()">
         <span class="txt">Previous</span>
       </div>

@@ -26,6 +26,8 @@ export class QuestionsPage implements OnInit {
   public interval;
   public displayTime: string = '';
 
+  public type: string;
+
   public showallQuestions: boolean = false;
 
   constructor(
@@ -54,15 +56,22 @@ export class QuestionsPage implements OnInit {
       this.questionLanguage = queryParams.language;
     }
 
+    if (queryParams !== undefined && queryParams.type !== undefined && queryParams.type !== '') {
+      this.type = queryParams.type;
+    } else {
+      this.type = '';
+    }
+
     if (queryParams !== undefined && queryParams.slug !== undefined && queryParams.slug !== '') {
-      this.fetchQuestions(queryParams.slug, this.count);
+      this.fetchQuestions(queryParams.slug, this.count, queryParams.level, queryParams.type);
     }
   }
 
-  fetchQuestions(slug, count) {
+  fetchQuestions(slug, count, levelID, type) {
     let queryParams = '?app_id=' + this.appID;
-    queryParams += 'limit = ' + count;
-    queryParams += 'search_category = ' + slug;
+    queryParams += '&limit=' + count;
+    queryParams += '&search_category=' + slug;
+    queryParams += '&search_level='+levelID;
     this.api.getStaticData('api/quiz' + queryParams).subscribe(result => {
       const response: any = result;
       if (response.body !== undefined) {
@@ -73,9 +82,11 @@ export class QuestionsPage implements OnInit {
             this.count = this.questions.length;
             this.question = this.questions[this.currentIndex];
             this.categoryName = "Basic Theory Test";
-            this.count = 2;
             this.getCountPercentage();
-            this.startTimer();
+            if(this.type == 'level') {
+              this.timeLeft = res.timings.level;
+              this.startTimer();
+            }
           } else {
             // this.formError = res.message;
           }
@@ -149,6 +160,10 @@ export class QuestionsPage implements OnInit {
   goPrev() {
     this.setAnswers();
     this.fetchNextQuestion('desc');
+  }
+
+  goBack() {
+    this.router.navigate(['/category']);
   }
 
   goNext() {
