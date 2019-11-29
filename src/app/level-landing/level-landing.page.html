@@ -6,7 +6,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
+<!--
 <ion-content>
   <ion-grid>
     <ion-row *ngIf="demoLevels.length > 0">
@@ -20,4 +20,21 @@
       <ion-col>There is no demo to participate in this section</ion-col>
     </ion-row>
   </ion-grid>
+</ion-content>
+-->
+
+<ion-content>
+
+  <div class="line" *ngIf="demoLevels.length > 0">
+		<div class="row cf" >
+				<div class="block"  *ngFor="let demoLevel of demoLevels;let i=index;" [ngClass]="{'fl': i%2 ==0, 'fr': i%2==1}">
+						<p (click)="getQuestions(demoLevel)" ><span [ngClass]="{'disabled' : (demoLevel.completed == false && demoLevel.inprogress == false)}" class="circle first"><span class="number">{{demoLevel.level_name}}</span></span></p>
+				</div>
+		</div>
+  </div>
+  
+  <ion-row *ngIf="demoLevels.length == 0">
+    <ion-col>There is no levels to participate in this section</ion-col>
+  </ion-row>
+
 </ion-content>
