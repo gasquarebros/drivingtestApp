@@ -27,7 +27,7 @@ export class QuestionsPage implements OnInit {
   public displayTime: string = '';
 
   public showallQuestions: boolean = false;
-
+  public level;
   constructor(
     private api: RestApiService,
     public authService: AuthService,
@@ -52,6 +52,10 @@ export class QuestionsPage implements OnInit {
     }
     if (queryParams !== undefined && queryParams.language !== undefined && queryParams.language !== '') {
       this.questionLanguage = queryParams.language;
+    }
+
+    if (queryParams !== undefined && queryParams.level !== undefined && queryParams.level !== '') {
+      this.level = queryParams.level;
     }
 
     if (queryParams !== undefined && queryParams.slug !== undefined && queryParams.slug !== '') {
@@ -197,13 +201,15 @@ export class QuestionsPage implements OnInit {
     body.append('userid', (this.userInfo != '')? this.userInfo.id: '');
     body.append('question_language', this.questionLanguage);
     body.append('limit', this.count.toString());
+    body.append('level', this.level);
     body.append('percent', percent);
     body.append('questions', JSON.stringify(this.answers));
     this.api.postData('api/quiz/participate', body).subscribe(result => {
       const res: any = result;
       if (res !== undefined) {
         if (res[0].status === 'success') {
-          this.router.navigate(['/questions/thankyou'], { queryParams: { percent: percent , participationId: res[0].data.id, language: this.questionLanguage} });
+          this.router.navigate(['/questions/thankyou'], 
+          { queryParams: { percent: percent , participationId: res[0].data.id, language: this.questionLanguage} });
           // this.router.navigateByUrl('/login');
         } else {
           // this.formError = res[0].form_error;
