@@ -10,9 +10,9 @@
 <ion-content>
     <ion-grid>
       <ion-row *ngIf="demoLevels.length > 0">
-        <ion-col size="3" class="demo-sections" *ngFor="let demoLevel of demoLevels;let i=index;" (click)="getQuestions(demolevel)">
+        <ion-col size="3" class="demo-sections" *ngFor="let demoLevel of demoLevels;let i=index;" (click)="getQuestions(demoLevel)">
           <div class="sizebox">
-            <div class="textbox">D{{demoLevel}}</div>
+            <div class="textbox">{{demoLevel.level_name}}</div>
           </div>
         </ion-col>
       </ion-row>

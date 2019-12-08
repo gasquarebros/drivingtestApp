@@ -1,9 +1,23 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>levelLanding</ion-title>
+    {{categoryName}}
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-grid>
+    <ion-row *ngIf="demoLevels.length > 0">
+      <ion-col size="3" class="demo-sections" *ngFor="let demoLevel of demoLevels;let i=index;" >
+        <div (click)="getQuestions(demoLevel)" class="sizebox" [ngClass]="{'disabled' : (demoLevel.completed == false && demoLevel.inprogress == false)}">
+          <div class="textbox">{{demoLevel.level_name}}</div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="demoLevels.length == 0">
+      <ion-col>There is no demo to participate in this section</ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

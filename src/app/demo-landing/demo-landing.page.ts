@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
 import { RestApiService } from '../rest-api.service';
+import { LoadingController } from '@ionic/angular';
+import { AuthService } from '../auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'underscore';
 
@@ -16,9 +17,11 @@ export class DemoLandingPage implements OnInit {
   public categoryName;
   public category;
 
-  constructor(private api: RestApiService,
-    public authService: AuthService,
+  constructor(
     private route: ActivatedRoute,
+    private api: RestApiService,
+    public authService: AuthService,
+    public loadingController: LoadingController,
     public router: Router) { }
 
   ngOnInit() {
@@ -34,14 +37,37 @@ export class DemoLandingPage implements OnInit {
       this.category = queryParams.slug;
       this.fetchlevels(queryParams.slug);
     }
+  } 
+
+  async presentLoadingWithOptions() {
+    const loading = await this.loadingController.create({
+      spinner: 'circles',
+      message: 'Please wait...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+    return await loading.present();
   }
 
   fetchlevels(slug) {
-    this.demoLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    this.presentLoadingWithOptions();
+    this.api.getStaticData('api/quiz/getlevels?search_level=demo').subscribe(result => {
+      this.loadingController.dismiss();
+      const response: any = result;
+      if (response.body !== undefined) {
+        const res = response.body;
+        if (res !== undefined) {
+          if (res.status === 'success') {
+            this.demoLevels = res.data;
+          }
+        }
+      }
+    });
+    // this.demoLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   }
 
   getQuestions(demolevel) {
-    this.router.navigate(['/questions'], { queryParams: { slug: this.category, level: demolevel, language: this.questionLanguage, type: 'demo' } });
+    this.router.navigate(['/questions'], { queryParams: { slug: this.category, level: demolevel.id, language: this.questionLanguage, type: 'demo' } });
   }
 
 }
