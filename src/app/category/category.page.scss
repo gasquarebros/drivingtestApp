@@ -1,3 +1,7 @@
+.pageGrid {
+    height: 100%;
+    background-size: cover;
+}
 .category-section {
     width: 100%;
 }
@@ -34,6 +38,8 @@
 ion-slide {
     border: 1px solid #ccc;
     padding-bottom: 10px;
+    background: white;
+    opacity: 1;
     ion-button {
         --background: #ff3333;
         color: white;

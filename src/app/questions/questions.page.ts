@@ -29,7 +29,7 @@ export class QuestionsPage implements OnInit {
   public type: string;
 
   public showallQuestions: boolean = false;
-
+  public level;
   constructor(
     private api: RestApiService,
     public authService: AuthService,
@@ -38,7 +38,7 @@ export class QuestionsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.categoryName = "Basic Theory Test";
+    this.categoryName = 'Basic Theory Test';
     this.appID = 'drivingAPP';
     this.questions = [];
     this.answers = [];
@@ -47,7 +47,7 @@ export class QuestionsPage implements OnInit {
     this.chooseOption = '';
     this.questionLanguage = 'english';
     //this.categoryName = "";
-    this.displayTime = "01:00";
+    this.displayTime = '01:00';
     const queryParams = this.route.snapshot.queryParams;
     if (queryParams !== undefined && queryParams.count !== undefined && queryParams.count !== '') {
       this.count = queryParams.count;
@@ -55,15 +55,17 @@ export class QuestionsPage implements OnInit {
     if (queryParams !== undefined && queryParams.language !== undefined && queryParams.language !== '') {
       this.questionLanguage = queryParams.language;
     }
+    if (queryParams !== undefined && queryParams.level !== undefined && queryParams.level !== '') {
+      this.level = queryParams.level;
+      if (queryParams !== undefined && queryParams.type !== undefined && queryParams.type !== '') {
+        this.type = queryParams.type;
+      } else {
+        this.type = '';
+      }
 
-    if (queryParams !== undefined && queryParams.type !== undefined && queryParams.type !== '') {
-      this.type = queryParams.type;
-    } else {
-      this.type = '';
-    }
-
-    if (queryParams !== undefined && queryParams.slug !== undefined && queryParams.slug !== '') {
-      this.fetchQuestions(queryParams.slug, this.count, queryParams.level, queryParams.type);
+      if (queryParams !== undefined && queryParams.slug !== undefined && queryParams.slug !== '') {
+        this.fetchQuestions(queryParams.slug, this.count, queryParams.level, queryParams.type);
+      }
     }
   }
 
@@ -81,9 +83,9 @@ export class QuestionsPage implements OnInit {
             this.questions = res.data;
             this.count = this.questions.length;
             this.question = this.questions[this.currentIndex];
-            this.categoryName = "Basic Theory Test";
+            this.categoryName = 'Basic Theory Test';
             this.getCountPercentage();
-            if(this.type == 'level') {
+            if(this.type === 'level') {
               this.timeLeft = res.timings.level;
               this.startTimer();
             }
@@ -102,33 +104,33 @@ export class QuestionsPage implements OnInit {
     let correctAnswer =  '';
     let isCorrect = 0;
     const selectedOptionId = this.chooseOption.id;
-    if(this.questionLanguage == 'english') {
+    if (this.questionLanguage === 'english') {
       selectedoptions = this.chooseOption.option;
     } else {
       selectedoptions = this.chooseOption.option_tamil;
     }
     _.each(this.question.options, (options: any) => {
-      if(options.is_answer == 1) {
-        if(selectedOptionId === options.id) {
+      if (options.is_answer == 1) {
+        if (selectedOptionId === options.id) {
           isCorrect = 1;
         }
-        correctAnswer = (this.questionLanguage == 'english') ? options.option: options.option_tamil;
+        correctAnswer = (this.questionLanguage === 'english') ? options.option : options.option_tamil;
       }
     });
     if (this.answers[this.currentIndex] !== undefined) {
       this.answers[this.currentIndex] = {
-        'question_id': this.question.id, 
-        'question': (this.questionLanguage == 'english') ? this.question.title : this.question.title_tamil, 
-        'option_answer': selectedoptions, 
-        'is_correct': isCorrect, 
+        'question_id': this.question.id,
+        'question': (this.questionLanguage === 'english') ? this.question.title : this.question.title_tamil,
+        'option_answer': selectedoptions,
+        'is_correct': isCorrect,
         'correct_answer': correctAnswer
       };
     } else {
       this.answers.push({
-        'question_id': this.question.id, 
-        'question': (this.questionLanguage == 'english') ? this.question.title : this.question.title_tamil, 
-        'option_answer': selectedoptions, 
-        'is_correct': isCorrect, 
+        'question_id': this.question.id,
+        'question': (this.questionLanguage === 'english') ? this.question.title : this.question.title_tamil,
+        'option_answer': selectedoptions,
+        'is_correct': isCorrect,
         'correct_answer': correctAnswer
       });
     }
@@ -212,13 +214,15 @@ export class QuestionsPage implements OnInit {
     body.append('userid', (this.userInfo != '')? this.userInfo.id: '');
     body.append('question_language', this.questionLanguage);
     body.append('limit', this.count.toString());
+    body.append('level', this.level); 
     body.append('percent', percent);
     body.append('questions', JSON.stringify(this.answers));
     this.api.postData('api/quiz/participate', body).subscribe(result => {
       const res: any = result;
       if (res !== undefined) {
         if (res[0].status === 'success') {
-          this.router.navigate(['/questions/thankyou'], { queryParams: { percent: percent , participationId: res[0].data.id, language: this.questionLanguage} });
+          this.router.navigate(['/questions/thankyou'], 
+          { queryParams: { percent: percent , participationId: res[0].data.id, language: this.questionLanguage} });
           // this.router.navigateByUrl('/login');
         } else {
           // this.formError = res[0].form_error;

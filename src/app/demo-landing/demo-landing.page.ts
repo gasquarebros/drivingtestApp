@@ -37,7 +37,7 @@ export class DemoLandingPage implements OnInit {
       this.category = queryParams.slug;
       this.fetchlevels(queryParams.slug);
     }
-  }
+  } 
 
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
