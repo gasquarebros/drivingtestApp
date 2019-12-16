@@ -37,6 +37,8 @@ export class UseractivityPage implements OnInit {
   public selectedCategory;
   public selectedLevel;
 
+  public nextOffset: number = 0;
+
   dateRange: {
     from: Date;
     to: Date
@@ -51,15 +53,20 @@ export class UseractivityPage implements OnInit {
     public router: Router) { }
 
   ngOnInit() {
+    this.selectedCategory = '';
+    this.selectedLevel = '';
+    const queryParams = this.route.snapshot.queryParams;
+    if (queryParams !== undefined && queryParams.selectedCategory !== undefined && queryParams.selectedCategory !== '') {
+      this.selectedCategory = queryParams.selectedCategory;
+    }
+    if (queryParams !== undefined && queryParams.selectedLevel !== undefined && queryParams.selectedLevel !== '') {
+      this.selectedLevel = queryParams.selectedLevel;
+    }
     this.acitivty = [];
     this.authService.getUserInfo().then(items => {
       this.userInfo = items;
       this.fetchUserActivity();
     });
-
-    this.selectedCategory = '';
-    this.selectedLevel = '';
-
     this.selectedType = '';
     this.selectedDateRange = [];
     this.MonthsFilter = [];
@@ -80,28 +87,47 @@ export class UseractivityPage implements OnInit {
   }
 
   fetchUserActivity() {
-    let queryParams = 'userid=' + this.userInfo.id + '&limit=15&category_name='+this.selectedLevel+'&category_type='+this.selectedCategory;
+    let queryParams = 'userid=' + this.userInfo.id + '&limit=15&category_name='+this.selectedLevel+'&category_type='+this.selectedCategory+'&offset='+this.nextOffset;
     if(this.selectedType) {
       queryParams += '&type='+this.selectedType+'&date='+this.selectedMonth;
     }
-    this.acitivty = [];
+    if(this.nextOffset == 0) {
+      this.acitivty = [];
+    }
     this.api.getStaticData('api/login/retrieveactivity?' + queryParams).subscribe(result => {
       const response: any = result;
       if (response.body !== undefined) {
         const res = response.body;
         if (res !== undefined) {
           if (res.status === 'success') {
-            this.acitivty = res.data;
+            if(this.nextOffset == 0) {
+              this.acitivty = res.data;
+            } else {
+              this.acitivty = this.acitivty.concat(res.data);
+            }
+            this.nextOffset = (res.pagination.nextpage_number !='')?((res.pagination.nextpage_number-1) * res.pagination.limit):-1;
           }
         }
       }
     });
   }
 
+  ionRefresh(event, offset) {
+    if (offset !== '' && offset >=0) {
+      this.fetchUserActivity();
+      setTimeout(() => {
+        event.target.complete();
+      }, 2000);
+    } else {
+      event.target.complete();
+    }
+  }
+
   monthSelection(month) {
     this.selectedType = 'month';
     this.selectedDateRange = [];
     this.selectedMonth = month;
+    this.nextOffset = 0;
     this.fetchUserActivity();
   }
 
@@ -123,8 +149,10 @@ export class UseractivityPage implements OnInit {
     const event: any = await myCalendar.onDidDismiss();
     const date: any = event.data;
     if(date) {
+      this.nextOffset = 0;
       this.selectedType = 'custom';
       this.selectedMonth = date.from.string+'|'+date.to.string;
+      this.fetchUserActivity();
     }
   }
 

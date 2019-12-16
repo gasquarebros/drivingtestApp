@@ -21,6 +21,7 @@ export class QuestionsPage implements OnInit {
   public appID: string;
   public userInfo: any = '';
   public categoryName: string = '';
+  public categoryId;
 
   public timeLeft: number = 60;
   public interval;
@@ -38,6 +39,9 @@ export class QuestionsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.authService.getUserInfo().then(items => {
+      this.userInfo = items;
+    });
     this.categoryName = 'Basic Theory Test';
     this.appID = 'drivingAPP';
     this.questions = [];
@@ -71,7 +75,7 @@ export class QuestionsPage implements OnInit {
 
   fetchQuestions(slug, count, levelID, type) {
     let queryParams = '?app_id=' + this.appID;
-    queryParams += '&limit=' + count;
+    queryParams += '&limit=-1';
     queryParams += '&search_category=' + slug;
     queryParams += '&search_level='+levelID;
     this.api.getStaticData('api/quiz' + queryParams).subscribe(result => {
@@ -81,9 +85,10 @@ export class QuestionsPage implements OnInit {
         if (res !== undefined) {
           if (res.status === 'success') {
             this.questions = res.data;
+            this.categoryName = this.questions[0].category_name;
+            this.categoryId = this.questions[0].category_id;
             this.count = this.questions.length;
             this.question = this.questions[this.currentIndex];
-            this.categoryName = 'Basic Theory Test';
             this.getCountPercentage();
             if(this.type === 'level') {
               this.timeLeft = res.timings.level;
@@ -156,7 +161,9 @@ export class QuestionsPage implements OnInit {
     const remainper: number = 100 - questionper; 
     console.log(this.count);
     console.log(questionper);
-    document.getElementById('background').style.cssText = 'width: '+questionper+'%';
+    if(document.getElementById('background')) {
+      document.getElementById('background').style.cssText = 'width: '+questionper+'%';
+    }
   }
 
   goPrev() {
@@ -216,6 +223,8 @@ export class QuestionsPage implements OnInit {
     body.append('limit', this.count.toString());
     body.append('level', this.level); 
     body.append('percent', percent);
+    body.append('categoryId', this.categoryId);
+    body.append('categoryName', this.categoryName);
     body.append('questions', JSON.stringify(this.answers));
     this.api.postData('api/quiz/participate', body).subscribe(result => {
       const res: any = result;

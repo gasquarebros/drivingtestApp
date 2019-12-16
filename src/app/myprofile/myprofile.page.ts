@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { RestApiService } from '../rest-api.service';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController, LoadingController } from '@ionic/angular';
+import { ActionSheetController, ToastController, LoadingController } from '@ionic/angular';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import * as _ from 'underscore';
 import { MustMatch } from './mustMatch.validator';
+import { Storage } from '@ionic/storage';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 
 @Component({
@@ -19,6 +21,10 @@ export class MyprofilePage implements OnInit {
   public userInfo: any;
 
   public formError: any;
+
+  base64Image: any = '';
+  image: any = '';
+  @ViewChild('fileInput', {static: false}) fileInput;
 
   validations_changePassword: FormGroup;
   validations_form: FormGroup;
@@ -68,6 +74,9 @@ export class MyprofilePage implements OnInit {
     public authService: AuthService,
     private route: ActivatedRoute,
     public toastCtrl: ToastController,
+    public camera: Camera,
+    public actionSheetCtrl: ActionSheetController,
+    private storage: Storage,
     public formBuilder: FormBuilder) { 
   }
 
@@ -162,6 +171,61 @@ export class MyprofilePage implements OnInit {
     };
   }
 
+  
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      // title: 'Select Image Source',
+      buttons: [
+        {
+          text: 'Load from Library',
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+          }
+        },
+        {
+          text: 'Use Camera',
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.CAMERA);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  takePicture(sourceType) {
+    // Create options for the Camera Dialog
+    const options: CameraOptions = {
+      sourceType: sourceType,
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 600,
+      targetHeight: 600,
+      saveToPhotoAlbum: false
+    };
+
+    if (Camera['installed']) {
+      this.camera.getPicture(options).then((imageData) => {
+        this.base64Image = 'data:image/jpeg;base64,' + imageData;
+      }, (err) => {
+        try {
+          this.fileInput.nativeElement.click();
+        } catch (err) {
+          console.log(err);
+          // this.presentToast('Sorry!! Something went wrong.');
+        }
+      });
+    } else {
+      this.fileInput.nativeElement.click();
+    }
+  }
+
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
       spinner: 'circles',
@@ -193,12 +257,13 @@ export class MyprofilePage implements OnInit {
     body.append('birthday', form.dob);
     body.append('gender', form.gender);
     body.append('phoneno', form.phoneno);
-    body.append('user_id', this.userInfo.bg_user_id);
-    this.api.postData('profile/updateInfo', body).subscribe(result => {
+    body.append('userid', this.userInfo.id);
+    this.api.postData('api/login/updateprofile', body).subscribe(result => {
       const res: any = result;
       let message = '';
       if (res !== undefined) {
         if (res[0].status === 'success') {
+          this.storage.set('USER_DATA_drivingApp', res[0].data);
           message = 'Profile updated successfully';
         } else {
           this.formError = res[0].error;

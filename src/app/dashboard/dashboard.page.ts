@@ -21,21 +21,25 @@ export class DashboardPage implements OnInit {
     private api: RestApiService,
     public authService: AuthService,
     public loadingController: LoadingController,
-    public router: Router) { }
+    public router: Router) { 
+      console.log('constructor');
+  }
 
   ngOnInit() {
+    this.userData = new Userdata();
+    this.userData.acitivty = [];
     this.authService.getUserInfo().then(items => {
       this.userInfo = items;
+      this.userData.customer_photo = items.siteuser_profile_img;
+      this.userData.customer_last_name = items.lastname;
+      this.userData.customer_first_name = items.firstname;
+      this.userData.levelName = 'Level 1';
       this.fetchUserActivity();
     });
-    this.userData = new Userdata();
-    this.userData.customer_photo = '';
-    this.userData.customer_last_name = 'User';
-    this.userData.customer_first_name = 'Info';
-    this.userData.levelName = 'Level 1';
-    this.userData.acitivty = [];
-    
-    //Retrieveactivity 
+  }
+
+  ionViewWillEnter(){
+    this.ngOnInit();
   }
 
   setFilterMethod(event) {
@@ -71,7 +75,7 @@ export class DashboardPage implements OnInit {
   }
 
   showActivity() {
-    this.router.navigate(['/useractivity']);
+    this.router.navigate(['/useractivity'], { queryParams: { selectedCategory: this.selectedType , selectedLevel: this.selectedMethod} });
   }
 
 }

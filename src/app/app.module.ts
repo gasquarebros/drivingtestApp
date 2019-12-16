@@ -14,6 +14,7 @@ import { HttpModule } from '@angular/http';
 import { AuthService } from './auth/auth.service';
 import { IonicStorageModule  } from '@ionic/storage';
 import { CalendarModule } from 'ion2-calendar';
+import { Camera } from '@ionic-native/camera/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,6 +34,7 @@ import { CalendarModule } from 'ion2-calendar';
     StatusBar,
     SplashScreen,
     AuthService,
+    Camera,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
