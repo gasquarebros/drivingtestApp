@@ -1,0 +1,49 @@
+.previousMonths {
+    float: left;
+    display: block;
+    margin: 3px;
+    padding: 9px;
+}
+.active {
+    background: #ccc;
+    color: white;
+}
+
+.fr {
+    float: right;
+}
+.crsptr {
+    cursor: pointer;
+}
+.calendarIcon {
+    margin: 12px;
+}
+
+
+.activities {
+    border: 1px solid #ccc;
+    border-left: 0px;
+    border-right: 0px;
+    .percent {
+        border: 1px solid #ccc;
+        border-radius: 59%;
+        text-align: center;
+        width: 50px;
+        height: 43px;
+        display:block;
+        margin-left: 13px;
+        span {
+            display: inline-block;
+            margin: 25% 0 0 0;
+            width: 50px;
+            height: 40px;
+        }
+    }
+    .view_more {
+        margin-top: 22%;
+        float: right;
+        padding: 10px;
+        background: white;
+        border: 1px solid #ccc;
+    }
+}

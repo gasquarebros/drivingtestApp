@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Report
+    </ion-title>
+   <!-- <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>-->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngFor="let options of questions;let i=index;"  >
+    <ion-item (click)="showForm(options.id)" [detail]="(reportQuestionSection.id == options.id) ? 'false': 'true'">
+      <h3 class="question_text" *ngIf="questionLanguage == 'english'"><ion-icon name="checkmark-circle" size="medium" class="tick icon" *ngIf="options.isCorrect"></ion-icon><ion-icon name="close-circle" class="false icon" size="medium" *ngIf="options.isCorrect == false"></ion-icon><span>{{options.title}}</span></h3> 
+      <h3 class="question_text" *ngIf="questionLanguage == 'tamil'"><ion-icon name="checkmark-circle" size="medium" class="tick icon" *ngIf="options.isCorrect"></ion-icon><ion-icon name="close-circle" class="false icon" size="medium" *ngIf="options.isCorrect == false"></ion-icon><span>{{options.title_tamil}}</span></h3>
+    </ion-item>
+    <div class="answer_section">
+      <p class="provided_answer" *ngIf="options.isCorrect == false">
+        <span><b>Your Answer:</b></span><span class="lftpad5">{{options.your_answer}}</span>
+      </p>
+      <p class="provided_answer">
+        <span><b>Correct Answer:</b></span><span class="lftpad5">{{options.correct_answer}}</span>
+      </p>
+    </div>
+    <form class="reportform" [formGroup]="validations_form" *ngIf="showDetail == false && reportQuestionSection.id == options.id" (ngSubmit)="reportQuestion(validations_form.value)">
+      <div class="validation-errors" [innerHTML]="formError">
+      </div>
+      <ion-row>
+      <ion-item>
+        <ion-input  formControlName="answer" placeholder="Enter Answer"></ion-input>
+      </ion-item>
+    </ion-row>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validation_messages.answer">
+          <div class="error-message" *ngIf="validations_form.get('answer').hasError(validation.type) && (validations_form.get('answer').dirty || validations_form.get('answer').touched)">
+            <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+          </div>
+        </ng-container>
+      </div>
+      <div class="report-action-btn">
+        <ion-button size="small" class="buttons" type="submit" [disabled]="!validations_form.valid"><p>Submit</p></ion-button>
+        <ion-button size="small" class="buttons" (click)="hideForm()"><p>cancel</p></ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>  
+<ion-footer>
+  <div class="backtodash">
+    <ion-button expand="full" class="buttons" (click)="goBack()">Back</ion-button>
+  </div>
+</ion-footer>

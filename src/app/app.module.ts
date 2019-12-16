@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { AuthService } from './auth/auth.service';
 import { IonicStorageModule  } from '@ionic/storage';
+import { CalendarModule } from 'ion2-calendar';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +26,8 @@ import { IonicStorageModule  } from '@ionic/storage';
     AppRoutingModule,
     HttpClientModule,
     HttpModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    CalendarModule
   ],
   providers: [
     StatusBar,
