@@ -38,11 +38,14 @@ export class QuestionsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.authService.getUserInfo().then(items => {
+      this.userInfo = items;
+    });
     this.categoryName = 'Basic Theory Test';
     this.appID = 'drivingAPP';
     this.questions = [];
     this.answers = [];
-    this.count = 0;
+    this.count = -1;
     this.currentIndex = 0;
     this.chooseOption = '';
     this.questionLanguage = 'english';
@@ -73,7 +76,7 @@ export class QuestionsPage implements OnInit {
     let queryParams = '?app_id=' + this.appID;
     queryParams += '&limit=' + count;
     queryParams += '&search_category=' + slug;
-    queryParams += '&search_level='+levelID;
+    queryParams += '&search_level=' + levelID;
     this.api.getStaticData('api/quiz' + queryParams).subscribe(result => {
       const response: any = result;
       if (response.body !== undefined) {
@@ -85,7 +88,7 @@ export class QuestionsPage implements OnInit {
             this.question = this.questions[this.currentIndex];
             this.categoryName = 'Basic Theory Test';
             this.getCountPercentage();
-            if(this.type === 'level') {
+            if (this.type == 'level') {
               this.timeLeft = res.timings.level;
               this.startTimer();
             }
@@ -153,10 +156,17 @@ export class QuestionsPage implements OnInit {
 
   getCountPercentage() {
     const questionper: number = ((this.currentIndex+1)/this.count)*100;
-    const remainper: number = 100 - questionper; 
+    const remainper: number = 100 - questionper;
     console.log(this.count);
     console.log(questionper);
-    document.getElementById('background').style.cssText = 'width: '+questionper+'%';
+    const docElemet = document.getElementById('background');
+    //console.log(docElemet.style);
+    console.log(docElemet);
+    if (docElemet) {
+      docElemet.style.width = questionper + '%';
+    }
+    // .setAttribute('width', questionper + '%');
+    // document.getElementById('background').style.cssText = 'width: '+questionper+'%';
   }
 
   goPrev() {
@@ -211,17 +221,18 @@ export class QuestionsPage implements OnInit {
   saveAnswers() {
     const body = new FormData();
     const percent = this.getPercentage();
-    body.append('userid', (this.userInfo != '')? this.userInfo.id: '');
+    body.append('userid', (this.userInfo != '') ? this.userInfo.id : '');
     body.append('question_language', this.questionLanguage);
     body.append('limit', this.count.toString());
-    body.append('level', this.level); 
+    body.append('level', this.level);
+    body.append('level_type', this.type);
     body.append('percent', percent);
     body.append('questions', JSON.stringify(this.answers));
     this.api.postData('api/quiz/participate', body).subscribe(result => {
       const res: any = result;
       if (res !== undefined) {
         if (res[0].status === 'success') {
-          this.router.navigate(['/questions/thankyou'], 
+          this.router.navigate(['/questions/thankyou'],
           { queryParams: { percent: percent , participationId: res[0].data.id, language: this.questionLanguage} });
           // this.router.navigateByUrl('/login');
         } else {

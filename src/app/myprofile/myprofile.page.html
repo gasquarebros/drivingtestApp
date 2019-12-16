@@ -1,9 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>myprofile</ion-title>
+    <ion-title>My Profile</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
   <form  [formGroup]="validations_form"  (ngSubmit)="updateProfile(validations_form.value)" >
     <ion-grid>
