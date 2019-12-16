@@ -14,11 +14,17 @@ const routes: Routes = [
   { path: 'myprofile', loadChildren: './myprofile/myprofile.module#MyprofilePageModule' },
   { path: 'demo-landing', loadChildren: './demo-landing/demo-landing.module#DemoLandingPageModule' },
   { path: 'level-landing', loadChildren: './level-landing/level-landing.module#LevelLandingPageModule' },
+  { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardPageModule' },
+  { path: 'useractivity', loadChildren: './useractivity/useractivity.module#UseractivityPageModule' },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { 
+      scrollPositionRestoration: 'top',
+      onSameUrlNavigation: 'reload', 
+      preloadingStrategy: PreloadAllModules 
+    })
   ],
   exports: [RouterModule]
 })

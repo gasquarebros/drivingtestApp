@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>User Activity</ion-title> 
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="filter">
+    <ion-row>
+      <ion-col size="8">
+        <ion-card class="previousMonths crsptr" (click)="monthSelection(month)" [ngClass]="{'active' : selectedMonth == month}" *ngFor="let month of MonthsFilter; let i = index" >{{month}}</ion-card>
+      </ion-col>
+      <ion-col size="4">
+          <ion-icon (click)="openCalendar()" class="fr crsptr calendarIcon" ios="ios-calendar" md="md-calendar"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-card no-margin class="card">
+    <ion-row>
+      <ion-col size="12">
+        <div class='activities' *ngFor="let activiti of acitivty; let i = index">
+          <ion-row>
+            <ion-col size="6">
+            <p class="date">{{activiti.quiz_participation_created_on | date:'mediumDate'}}</p>
+            <p class="title">{{activiti.quiz_participation_category_name}} BTT</p>
+            </ion-col>
+            <ion-col size="3">
+              <p class="percent"><span>{{activiti.quiz_participation_percent}}%</span></p>
+            </ion-col>
+            <ion-col size="3">
+              <button ion-button class="view_more" (click)="showFilter(activiti)">view more</button>
+            </ion-col>
+          </ion-row>
+        </div>
+        <ion-infinite-scroll *ngIf="acitivty.length > 0" (ionInfinite)="ionRefresh($event, nextOffset)" loadingSpinner="bubbles" loadingText="Loading Users...">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+        <p class="label_activity txtcntr" *ngIf="acitivty.length == 0">No Activity Found</p>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+</ion-content>

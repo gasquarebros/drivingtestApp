@@ -1,0 +1,41 @@
+.question_text {
+    font-size:15px; 
+    span {
+        vertical-align: top;
+    }
+    .icon {
+        font-size: 20px;
+        padding-top: 0px;
+        vertical-align: bottom;
+        padding-right: 5px;
+    }
+    .tick {
+        color: green;
+    }
+    .false {
+        color: red;
+    }
+}
+.answer_section {
+    padding-left: 14px;
+    border-bottom: 1px solid #c8c7cc;
+    .lftpad5 {
+        padding-left: 5px;
+    }
+}
+.reportform {
+   border-bottom: 1px solid #c8c7cc;
+   .report-action-btn {
+       text-align: center;
+       padding-top: 5px;
+   }
+}
+ion-button {
+    margin-top: 0px;
+    margin-bottom: 10px;
+    --background: #ff3333;
+    color: white;
+    --background-activated: #ff3333;
+    --background-focused: #ff3333;
+    --background-hover: #ff3333;
+}

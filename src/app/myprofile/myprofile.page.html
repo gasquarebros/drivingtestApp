@@ -14,7 +14,13 @@
           <div>
             <div class="error-message server-error" [innerHTML]="formError">
             </div>
-            <ion-item>
+            <div class="SelectImage">
+              <img [src]="base64Image" *ngIf="base64Image" class="AddImage">  
+              <div class="profile-photo" *ngIf="!base64Image">Profile Photo</div>
+              <div class="ImageDiv" [style.backgroundImage]="'url(' + DefaultImg + ')'" (click)="presentActionSheet()"> Upload
+              </div>
+            </div>
+            <ion-item style="clear:both">
               <div class="col1">
                 <ion-input  formControlName="firstname" type="text" placeholder="First Name"  required></ion-input>
                 <div class="validation-errors">

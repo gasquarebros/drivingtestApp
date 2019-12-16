@@ -35,6 +35,14 @@ export class LevelLandingPage implements OnInit {
       this.fetchlevels(queryParams.slug);
     }
   }
+  ngAfterViewInit() {
+    this.removeLoader();
+  }
+  removeLoader() {
+    setTimeout(() => {
+      this.loadingController.dismiss();
+    }, 2000);
+  }
 
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
@@ -55,10 +63,12 @@ export class LevelLandingPage implements OnInit {
         const res = response.body;
         if (res !== undefined) {
           if (res.status === 'success') {
+            this.removeLoader();
             this.demoLevels = res.data;
           }
         }
       }
+      this.removeLoader(); 
     });
     // this.demoLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   }
