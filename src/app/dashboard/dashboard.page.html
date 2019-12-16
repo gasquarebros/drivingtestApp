@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    Dashboard
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="dashboard-content">
+    <div class="top-profile">
+      <ion-card  no-margin class="card">
+        <ion-row>
+          <ion-col col-10>      
+            <ion-avatar>
+              <img *ngIf="userData.customer_photo" [src]="userData.customer_photo">
+              <ion-icon *ngIf="userData.customer_photo == ''" name="contact"></ion-icon>
+            </ion-avatar>
+            <div class="item-inner">
+              <div class="input-wrapper">
+                <ion-label class="label label-ios">
+                  <h2 class="username" style="font-weight: bold">{{userData.customer_first_name}} {{userData.customer_last_name}}</h2>
+                  <p class="post-category" >{{userData.levelName}}</p>
+                </ion-label>
+              </div>
+            </div>
+          </ion-col>  
+          <ion-col col-2>
+              <button [routerLink]="['/myprofile']" no-margin no-padding clear color="black" ion-button icon-only style="float: right; margin-top: 15px; margin-right: 5px;background: #fff;">
+                  <ion-icon name="create"></ion-icon>
+              </button>
+          </ion-col>  
+        </ion-row>
+        <ion-row class="filterRow">
+          <ion-col (click)="setFilterType('BTT')" class="filter-section-type crptr" size="6" [ngClass]="{'active' : selectedType == 'BTT'}"> <span class="section-type">BTT</span> </ion-col>
+          <ion-col (click)="setFilterType('FTT')" class="filter-section-type crptr" size="6" [ngClass]="{'active' : selectedType == 'FTT'}"> <span class="section-type">FTT</span> </ion-col>
+        </ion-row>
+        <ion-row class="filterRow">
+          <ion-col (click)="setFilterMethod('level')" class="filter-section-type crptr" size="6" [ngClass]="{'active' : selectedMethod == 'level'}"> <span class="section-type">Level</span> </ion-col>
+          <ion-col (click)="setFilterMethod('demo')" class="filter-section-type crptr" size="6" [ngClass]="{'active' : selectedMethod == 'demo'}"> <span class="section-type">Demo</span> </ion-col>
+        </ion-row>
+      </ion-card>
+      <ion-card no-margin class="card">
+        <ion-row>
+          <ion-col size="12">
+            <p class="label_activity">User Activity <span class="fr crptr" (click)="showActivity()">view all</span></p>
+            <div class='activities' *ngFor="let activity of userData.acitivty; let i = index">
+               <!-- 
+                 quiz_options: Array(1)
+0:
+quiz_participate_options_correct_answer: "true, and most likely licence will also be revoked"
+quiz_participate_options_id: 17
+quiz_participate_options_iscorrect: 0
+quiz_participate_options_options_answered: "false"
+quiz_participate_options_participateId: 18
+quiz_participate_options_question: "The penalty for using mobile phone whilst driving is a fine not more than 1,000 dollars or maximum imprisonment of 6 months or both."
+quiz_participate_options_questionId: 62
+__proto__: Object
+length: 1
+__proto__: Array(0)
+quiz_participate_type: "level"
+quiz_participation_category: 0
+quiz_participation_category_name: null
+quiz_participation_count: 1
+quiz_participation_created_on: "2019-12-08 21:11:04"
+quiz_participation_id: 18
+quiz_participation_language: "english"
+quiz_participation_percent: 0
+quiz_participation_user_id: 27
+               -->
+               <ion-row>
+                <ion-col size="8">
+                <p class="date">{{activity.quiz_participation_created_on | date:'mediumDate'}}</p>
+                <p class="title">{{activity.quiz_participation_category_name}} BTT</p>
+                </ion-col>
+                <ion-col size="4">
+                  <p class="percent"><span>{{activity.quiz_participation_percent}}</span></p>
+                </ion-col>
+              </ion-row>
+            </div>
+            <p class="label_activity txtcntr" *ngIf="userData.acitivty.length == 0">No Activity Found</p>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

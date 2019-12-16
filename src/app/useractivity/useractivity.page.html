@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    User Activity
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="filter">
+    <ion-row>
+      <ion-col size="8">
+        <ion-card *ngFor="let month of MonthsFilter; let i = index" >month</ion-card>
+      </ion-col>
+      <ion-col size="4">
+          <ion-icon ios="ios-calendar" md="md-calendar"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>
