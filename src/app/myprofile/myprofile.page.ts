@@ -258,6 +258,7 @@ export class MyprofilePage implements OnInit {
     body.append('gender', form.gender);
     body.append('phoneno', form.phoneno);
     body.append('userid', this.userInfo.id);
+    body.append('userImg', this.base64Image);
     this.api.postData('api/login/updateprofile', body).subscribe(result => {
       const res: any = result;
       let message = '';
