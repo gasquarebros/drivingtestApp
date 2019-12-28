@@ -216,6 +216,7 @@ export class QuestionsPage implements OnInit {
   }
 
   submitAnswers() {
+    this.pauseTimer();
     this.setAnswers();
     this.saveAnswers();
   }
